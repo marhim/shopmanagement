@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Browser" id="3" width="800" height="600" text="&#xA;http://..." measuredWidth="800" measuredHeight="600"/>
+  <widgets xsi:type="model:Tree" id="4" x="24" y="128" width="200" height="450" text="[v] Lebensmittel&#xA;-[v] Teigwaren&#xA;--[] Salzstangen&#xA;---() Lorenz&#xA;---() gut und günstig&#xA;---() schlecht und teuer&#xA;--[] Kartoffelchips&#xA;---() Chio ungarisch&#xA;---() Pringles Onion&#xA;---() Ja! Paprika&#xA;---() Nein! Fenchel&#xA;[v] Haushaltswaren&#xA;-[] Besenstiele&#xA;--() Nölle Profi Brush&#xA;--() Leifheit&#xA;--() Nimbus 2000&#xA;[v] Hygieneartikel&#xA;-[] Windel&#xA;--() Pampers&#xA;--() babydream&#xA;--() adultsleepless" measuredWidth="200" measuredHeight="450">
+    <items x="0" y="5" width="200" height="21" text="[v] Lebensmittel"/>
+    <items x="0" y="26" width="200" height="21" text="-[v] Teigwaren"/>
+    <items x="0" y="47" width="200" height="21" text="--[] Salzstangen"/>
+    <items x="0" y="68" width="200" height="21" text="---() Lorenz"/>
+    <items x="0" y="89" width="200" height="21" text="---() gut und günstig"/>
+    <items x="0" y="110" width="200" height="21" text="---() schlecht und teuer"/>
+    <items x="0" y="131" width="200" height="21" text="--[] Kartoffelchips"/>
+    <items x="0" y="152" width="200" height="21" text="---() Chio ungarisch"/>
+    <items x="0" y="173" width="200" height="21" text="---() Pringles Onion"/>
+    <items x="0" y="194" width="200" height="21" text="---() Ja! Paprika"/>
+    <items x="0" y="215" width="200" height="21" text="---() Nein! Fenchel"/>
+    <items x="0" y="236" width="200" height="21" text="[v] Haushaltswaren"/>
+    <items x="0" y="257" width="200" height="21" text="-[] Besenstiele"/>
+    <items x="0" y="278" width="200" height="21" text="--() Nölle Profi Brush"/>
+    <items x="0" y="299" width="200" height="21" text="--() Leifheit"/>
+    <items x="0" y="320" width="200" height="21" text="--() Nimbus 2000"/>
+    <items x="0" y="341" width="200" height="21" text="[v] Hygieneartikel"/>
+    <items x="0" y="362" width="200" height="21" text="-[] Windel"/>
+    <items x="0" y="383" width="200" height="21" text="--() Pampers"/>
+    <items x="0" y="404" width="200" height="21" text="--() babydream"/>
+    <items x="0" y="425" width="200" height="21" text="--() adultsleepless"/>
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="5" x="24" y="76" width="36" height="36" measuredWidth="36" measuredHeight="36" background="#cccccc" icon="list (medium)">
+    <font size="20px"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="6" x="72" y="71" text="Produktkatalog" measuredWidth="234" measuredHeight="45">
+    <font size="32px"/>
+  </widgets>
+  <widgets xsi:type="model:Hotspot" id="7" x="104" y="240" width="105" height="17" measuredWidth="105" measuredHeight="17"/>
+  <widgets xsi:type="model:Panel" id="9" x="240" y="128" width="537" height="450" measuredWidth="537" measuredHeight="450"/>
+  <widgets xsi:type="model:Label" id="10" x="256" y="144" text="Eigenschaften" measuredWidth="162" measuredHeight="36">
+    <font size="24px"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="11" x="256" y="200" text="Name" measuredWidth="38" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="12" x="256" y="237" text="Beschreibung" measuredWidth="82" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="13" x="256" y="352" text="Preis" measuredWidth="33" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="14" x="368" y="200" width="129" text="schlecht und teuer" measuredWidth="129" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextArea" id="15" x="368" y="237" width="200" height="100" text="Das Produkt hält, was es verspricht.&#xA;Sie werden nicht enttäuscht sein." measuredWidth="200" measuredHeight="100">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="16" x="368" y="352" width="65" text="23,50€" measuredWidth="65" measuredHeight="23" textAlignment="Center">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>
