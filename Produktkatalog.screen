@@ -2,7 +2,7 @@
 <model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
   <widgets xsi:type="model:Browser" id="3" width="800" height="600" text="&#xA;http://..." measuredWidth="800" measuredHeight="600"/>
   <widgets xsi:type="model:Master" id="19" x="248" y="128" measuredWidth="529" measuredHeight="450">
-    <screen xsi:type="model:Screen" href="assets/Objekteigenschaften.screen#/"/>
+    <screen xsi:type="model:Screen" href="assets/Katalogeigenschaften.screen#/"/>
   </widgets>
   <widgets xsi:type="model:Master" id="20" x="24" y="128" measuredWidth="209" measuredHeight="450">
     <screen xsi:type="model:Screen" href="assets/Produktbaum.screen#/"/>
