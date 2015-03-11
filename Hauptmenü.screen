@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
   <widgets xsi:type="model:Browser" id="1" width="800" height="600" text="&#xA;http://..." measuredWidth="800" measuredHeight="600"/>
-  <widgets xsi:type="model:Button" id="6" x="56" y="120" width="161" height="161" measuredWidth="161" measuredHeight="161" icon="book (xlarge)" link="Produktkatalog.screen">
+  <widgets xsi:type="model:Button" id="6" x="208" y="120" width="161" height="161" measuredWidth="161" measuredHeight="161" icon="book (xlarge)" link="Produktkatalog.screen">
+    <font size="12px"/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="7" x="400" y="120" width="161" height="161" measuredWidth="161" measuredHeight="161" icon="home (xlarge)" link="Filialkatalog.screen">
     <font size="12px"/>
   </widgets>
   <hRuler/>
