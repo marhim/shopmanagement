@@ -7,7 +7,7 @@
   <widgets xsi:type="model:Master" id="20" x="24" y="128" measuredWidth="209" measuredHeight="450">
     <screen xsi:type="model:Screen" href="assets/Produktbaum.screen#/"/>
   </widgets>
-  <widgets xsi:type="model:Button" id="5" x="24" y="76" width="36" height="36" measuredWidth="36" measuredHeight="36" background="#cccccc" icon="list (medium)">
+  <widgets xsi:type="model:Button" id="5" x="24" y="76" width="36" height="36" measuredWidth="36" measuredHeight="36" background="#cccccc" icon="table (medium)" link="Hauptmenü.screen">
     <font size="20px"/>
   </widgets>
   <widgets xsi:type="model:Label" id="6" x="72" y="71" text="Produktkatalog" measuredWidth="234" measuredHeight="45">
