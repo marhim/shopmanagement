@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="1" x="248" y="128" width="529" height="450" measuredWidth="529" measuredHeight="450"/>
+  <widgets xsi:type="model:Label" id="2" x="271" y="144" text="Eigenschaften" measuredWidth="162" measuredHeight="36">
+    <font size="24px"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="3" x="271" y="200" text="Name" measuredWidth="38" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="4" x="271" y="237" text="Beschreibung" measuredWidth="82" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="5" x="271" y="352" text="Preis" measuredWidth="33" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="6" x="368" y="200" width="129" text="schlecht und teuer" measuredWidth="129" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextArea" id="7" x="368" y="237" width="200" height="100" text="Das Produkt hält, was es verspricht.&#xA;Sie werden nicht enttäuscht sein." measuredWidth="200" measuredHeight="100">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="8" x="368" y="352" width="65" text="23,50€" measuredWidth="65" measuredHeight="23" textAlignment="Center">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>

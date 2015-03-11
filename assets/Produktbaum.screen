@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Tree" id="1" x="24" y="128" width="209" height="450" text="[v] Lebensmittel&#xA;-[v] Teigwaren&#xA;--[] Salzstangen&#xA;---() Lorenz&#xA;---() gut und günstig&#xA;---() schlecht und teuer&#xA;--[] Kartoffelchips&#xA;---() Chio ungarisch&#xA;---() Pringles Onion&#xA;---() Ja! Paprika&#xA;---() Nein! Fenchel&#xA;[v] Haushaltswaren&#xA;-[] Besenstiele&#xA;--() Nölle Profi Brush&#xA;--() Leifheit&#xA;--() Nimbus 2000&#xA;[v] Hygieneartikel&#xA;-[] Windel&#xA;--() Pampers&#xA;--() babydream&#xA;--() adultsleepless" verticalScrollbar="true" selection="5">
+    <items text="[v] Lebensmittel"/>
+    <items text="-[v] Teigwaren"/>
+    <items text="--[] Salzstangen"/>
+    <items text="---() Lorenz"/>
+    <items text="---() gut und günstig"/>
+    <items text="---() schlecht und teuer"/>
+    <items text="--[] Kartoffelchips"/>
+    <items text="---() Chio ungarisch"/>
+    <items text="---() Pringles Onion"/>
+    <items text="---() Ja! Paprika"/>
+    <items text="---() Nein! Fenchel"/>
+    <items text="[v] Haushaltswaren"/>
+    <items text="-[] Besenstiele"/>
+    <items text="--() Nölle Profi Brush"/>
+    <items text="--() Leifheit"/>
+    <items text="--() Nimbus 2000"/>
+    <items text="[v] Hygieneartikel"/>
+    <items text="-[] Windel"/>
+    <items text="--() Pampers"/>
+    <items text="--() babydream"/>
+    <items text="--() adultsleepless"/>
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>
