@@ -28,6 +28,12 @@
   <widgets xsi:type="model:Label" id="34" x="512" y="76" text="Filiale" measuredWidth="48" measuredHeight="27">
     <font size="16px"/>
   </widgets>
+  <widgets xsi:type="model:Popup" id="35" x="120" y="376" text="{add} Hinzufügen&#xA;{copy} Kopieren&#xA;{paste} ~Einfügen~&#xA;{delete} Entfernen" measuredWidth="94" measuredHeight="96">
+    <items x="0" y="2" width="94" height="23" text="{add} Hinzufügen"/>
+    <items x="0" y="25" width="94" height="23" text="{copy} Kopieren"/>
+    <items x="0" y="48" width="94" height="23" text="{paste} ~Einfügen~"/>
+    <items x="0" y="71" width="94" height="23" text="{delete} Entfernen"/>
+  </widgets>
   <hRuler/>
   <vRuler/>
   <font size="12px"/>
