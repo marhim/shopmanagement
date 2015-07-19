@@ -10,14 +10,14 @@ import de.david.shopmanagement.util.CategoryData;
 /**
  *
  */
-public class MainMenuViewImp extends CustomComponent implements MainMenuView, View {
+public class MainMenuViewImpl extends CustomComponent implements MainMenuView, View {
     public static final String NAME = "MainMenu";
     private static final String MAIN_MENU_CAPTION = "Hauptmenü";
     private MainMenuPresenter mainMenuPresenter;
     private Layout buttonLayout;
     private VerticalLayout mainLayout;
 
-    public MainMenuViewImp() {
+    public MainMenuViewImpl() {
         init();
     }
 
@@ -38,6 +38,7 @@ public class MainMenuViewImp extends CustomComponent implements MainMenuView, Vi
     public void addButton(CategoryData buttonData) {
         Button tmpButton = new Button();
         tmpButton.setCaption(buttonData.getDisplayName()); // TODO: Add Navigator
+        tmpButton.addClickListener(clickEvent -> getUI().getNavigator().navigateTo(buttonData.getNavigatorName()));
         this.buttonLayout.addComponent(tmpButton);
     }
 

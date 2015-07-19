@@ -10,15 +10,15 @@ import java.util.List;
 /**
  *
  */
-public class MainMenuPresenterImp implements MainMenuPresenter {
+public class MainMenuPresenterImpl implements MainMenuPresenter {
     MainMenuModel mainMenuModel;
     MainMenuView mainMenuView;
 
-    public MainMenuPresenterImp() {
+    public MainMenuPresenterImpl() {
         super();
     }
 
-    public MainMenuPresenterImp(MainMenuModel mainMenuModel, MainMenuView mainMenuView) {
+    public MainMenuPresenterImpl(MainMenuModel mainMenuModel, MainMenuView mainMenuView) {
         this.mainMenuModel = mainMenuModel;
         this.mainMenuView = mainMenuView;
     }

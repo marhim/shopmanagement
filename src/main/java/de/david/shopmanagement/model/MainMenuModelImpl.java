@@ -9,14 +9,14 @@ import java.util.List;
 /**
  *
  */
-public class MainMenuModelImp implements MainMenuModel {
+public class MainMenuModelImpl implements MainMenuModel {
     private List<CategoryData> categories;
 
-    public MainMenuModelImp() {
+    public MainMenuModelImpl() {
         this(null);
     }
 
-    public MainMenuModelImp(List<CategoryData> categories) {
+    public MainMenuModelImpl(List<CategoryData> categories) {
         if (categories != null) {
             this.categories = categories;
         } else {
