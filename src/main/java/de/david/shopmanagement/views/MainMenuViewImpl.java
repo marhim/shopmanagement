@@ -37,7 +37,7 @@ public class MainMenuViewImpl extends CustomComponent implements MainMenuView, V
     @Override
     public void addButton(CategoryData buttonData) {
         Button tmpButton = new Button();
-        tmpButton.setCaption(buttonData.getDisplayName()); // TODO: Add Navigator
+        tmpButton.setCaption(buttonData.getDisplayName());
         tmpButton.addClickListener(clickEvent -> getUI().getNavigator().navigateTo(buttonData.getNavigatorName()));
         this.buttonLayout.addComponent(tmpButton);
     }
