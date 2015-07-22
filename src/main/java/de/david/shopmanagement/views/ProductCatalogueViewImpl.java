@@ -2,34 +2,42 @@ package de.david.shopmanagement.views;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Layout;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
+import de.david.shopmanagement.interfaces.CatalogueView;
 import de.david.shopmanagement.interfaces.ProductCataloguePresenter;
 import de.david.shopmanagement.interfaces.ProductCatalogueView;
 
 /**
  * @author Marvin
  */
-public class ProductCatalogueViewImpl extends CustomComponent implements ProductCatalogueView, View {
+public class ProductCatalogueViewImpl extends CatalogueViewImpl implements ProductCatalogueView, View {
     public static final String NAME = "ProductCatalogue";
     public static final String DISPLAY_NAME = "Produktkatalog";
     private ProductCataloguePresenter productCataloguePresenter;
-    private Layout layout;
+    private Label leftLabel;
+    private Label rightLabel;
 
     public ProductCatalogueViewImpl() {
+        super();
         init();
     }
 
     private void init() {
         setSizeFull();
 
-        layout = new VerticalLayout();
-        Label label = new Label("Hallo PRODUKTKATALOG");
-        layout.addComponent(label);
+        leftLabel = new Label("Ich bin links");
+        rightLabel = new Label("Ich bin rechts");
 
-        setCompositionRoot(layout);
+        createMainMenuButton();
+        createTitle(DISPLAY_NAME);
+        createSplitPanel();
+
+        leftBodyLayout.addComponent(leftLabel);
+        rightBodyLayout.addComponent(rightLabel);
+
+        addComponentsToMainLayout();
+
+        setCompositionRoot(mainLayout);
     }
 
     @Override

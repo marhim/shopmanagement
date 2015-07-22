@@ -30,14 +30,14 @@ public class MainUI extends UI {
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         List<CategoryData> categories = new ArrayList<>();
-        CategoryData storeCatalogue = new CategoryData();
-        storeCatalogue.setNavigatorName(StoreCatalogueViewImpl.NAME);
-        storeCatalogue.setDisplayName(StoreCatalogueViewImpl.DISPLAY_NAME);
-        categories.add(storeCatalogue);
         CategoryData productCatalogue = new CategoryData();
         productCatalogue.setNavigatorName(ProductCatalogueViewImpl.NAME);
         productCatalogue.setDisplayName(ProductCatalogueViewImpl.DISPLAY_NAME);
         categories.add(productCatalogue);
+        CategoryData storeCatalogue = new CategoryData();
+        storeCatalogue.setNavigatorName(StoreCatalogueViewImpl.NAME);
+        storeCatalogue.setDisplayName(StoreCatalogueViewImpl.DISPLAY_NAME);
+        categories.add(storeCatalogue);
 
         MainMenuModelImpl mainMenuModelImpl = new MainMenuModelImpl();
         mainMenuModelImpl.addCategories(categories);

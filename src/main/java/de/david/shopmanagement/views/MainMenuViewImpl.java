@@ -12,7 +12,7 @@ import de.david.shopmanagement.util.CategoryData;
  */
 public class MainMenuViewImpl extends CustomComponent implements MainMenuView, View {
     public static final String NAME = "MainMenu";
-    private static final String MAIN_MENU_CAPTION = "Hauptmenü";
+    public static final String MAIN_MENU_DISPLAY_NAME = "Hauptmenü";
     private MainMenuPresenter mainMenuPresenter;
     private Layout buttonLayout;
     private VerticalLayout mainLayout;
@@ -25,7 +25,7 @@ public class MainMenuViewImpl extends CustomComponent implements MainMenuView, V
         setSizeFull();
 
         this.buttonLayout = new HorizontalLayout();
-        this.buttonLayout.setCaption(MAIN_MENU_CAPTION);
+        this.buttonLayout.setCaption(MAIN_MENU_DISPLAY_NAME);
         this.buttonLayout.setSizeUndefined();
 
         this.mainLayout = new VerticalLayout(this.buttonLayout);
