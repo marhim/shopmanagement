@@ -10,10 +10,11 @@ public class CatalogueViewImpl extends CustomComponent implements CatalogueView 
     protected Layout mainLayout;
     protected HorizontalLayout headLayout;
     protected Layout leftBodyLayout;
-    protected Layout rightBodyLayout;
+    protected GridLayout rightBodyLayout;
     protected HorizontalSplitPanel bodySplitPanel;
     protected Button mainMenuButton;
     protected Label title;
+    protected Label contentTitle;
 
     public CatalogueViewImpl() {
         mainLayout = new VerticalLayout();
@@ -21,7 +22,10 @@ public class CatalogueViewImpl extends CustomComponent implements CatalogueView 
         headLayout.setSizeFull();
         bodySplitPanel = new HorizontalSplitPanel();
         leftBodyLayout = new VerticalLayout();
-        rightBodyLayout = new VerticalLayout();
+        rightBodyLayout = new GridLayout(2,4);
+        rightBodyLayout.setSizeFull();
+        rightBodyLayout.setVisible(false);
+        contentTitle = new Label();
     }
 
     protected void createMainMenuButton() {
@@ -37,6 +41,10 @@ public class CatalogueViewImpl extends CustomComponent implements CatalogueView 
         title.setValue(titleString);
         headLayout.addComponent(title);
         headLayout.setComponentAlignment(title, Alignment.MIDDLE_LEFT);
+    }
+
+    protected void createContentTitle() {
+        rightBodyLayout.addComponent(contentTitle, 0, 0, 1, 0);
     }
 
     protected void createSplitPanel() {
