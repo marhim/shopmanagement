@@ -20,10 +20,14 @@ def bulk_create(data):
 def create_product_catalog(num_levels, num_children):
 
     def create_node(index):
-        node_name = 'catalog item ' + str(index)
-        node_description = random.choice(['foo', 'bar', 'baz', 'glory'])
+        properties = {
+            'index': index,
+            'name': 'catalog item ' + str(index),
+            'price': round(0.90 + 24.0 * random.random(), ndigits=2),
+            'description': random.choice(['foo', 'bar', 'baz', 'glory'])
+        }
 
-        return Node('ProductCatalog', index=index, name=node_name, description=node_description)
+        return Node('ProductCatalog', **properties)
 
     logger.info('Creating nodes...')
     nodes = []
@@ -47,8 +51,14 @@ def create_product_catalog(num_levels, num_children):
         parent_index = int((node.properties['index'] - 1) / num_children)
         parent = graph.find_one('ProductCatalog', property_key='index', property_value=parent_index)
 
+        # only leaves have prices
+        parent['price'] = None
+
         parent_of = Relationship(parent, 'IS_PARENT_OF', node)
         relations.append(parent_of)
+
+    # update nodes
+    graph.push(*nodes)
 
     bulk_create(data=relations)
 
