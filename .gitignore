@@ -58,3 +58,4 @@ release.properties
 dependency-reduced-pom.xml
 
 
+neo4j-database/messages.log
