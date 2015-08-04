@@ -5,6 +5,8 @@ package de.david.shopmanagement.interfaces;
  */
 public interface ProductCataloguePresenter {
 
+    void init();
+
     ProductCatalogueModel getModel();
 
     void setModel(ProductCatalogueModel productCatalogueModel);

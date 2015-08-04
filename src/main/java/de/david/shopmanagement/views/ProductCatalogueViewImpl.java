@@ -2,8 +2,10 @@ package de.david.shopmanagement.views;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.*;
-import de.david.shopmanagement.interfaces.CatalogueView;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.Tree;
 import de.david.shopmanagement.interfaces.ProductCataloguePresenter;
 import de.david.shopmanagement.interfaces.ProductCatalogueView;
 
@@ -36,7 +38,6 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
         contentNameTextField = new TextField();
         contentDescriptionTextField = new TextArea();
         contentPriceTextField = new TextField();
-        leftLabel = new Label("Ich bin links");
         init();
     }
 
@@ -47,12 +48,15 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
         createTitle(DISPLAY_NAME);
         createSplitPanel();
 
-        leftBodyLayout.addComponent(leftLabel);
         createContent();
 
         addComponentsToMainLayout();
 
         setCompositionRoot(mainLayout);
+    }
+
+    public void createTree(Tree tree) {
+        leftBodyLayout.addComponent(tree);
     }
 
     private void createContent() {

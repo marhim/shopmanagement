@@ -8,8 +8,11 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
+import de.david.shopmanagement.interfaces.*;
 import de.david.shopmanagement.model.MainMenuModelImpl;
+import de.david.shopmanagement.model.ProductCatalogueModelImpl;
 import de.david.shopmanagement.presenter.MainMenuPresenterImpl;
+import de.david.shopmanagement.presenter.ProductCataloguePresenterImpl;
 import de.david.shopmanagement.util.CategoryData;
 import de.david.shopmanagement.views.MainMenuViewImpl;
 import de.david.shopmanagement.views.ProductCatalogueViewImpl;
@@ -39,18 +42,25 @@ public class MainUI extends UI {
         storeCatalogue.setDisplayName(StoreCatalogueViewImpl.DISPLAY_NAME);
         categories.add(storeCatalogue);
 
-        MainMenuModelImpl mainMenuModelImpl = new MainMenuModelImpl();
-        mainMenuModelImpl.addCategories(categories);
-        MainMenuPresenterImpl mainMenuPresenterImpl = new MainMenuPresenterImpl();
-        mainMenuPresenterImpl.setModel(mainMenuModelImpl);
+        MainMenuModel mainMenuModel = new MainMenuModelImpl();
+        mainMenuModel.addCategories(categories);
+        MainMenuPresenter mainMenuPresenter = new MainMenuPresenterImpl();
+        mainMenuPresenter.setModel(mainMenuModel);
         MainMenuViewImpl mainMenuViewImpl = new MainMenuViewImpl();
-        mainMenuPresenterImpl.setView(mainMenuViewImpl);
-        mainMenuPresenterImpl.initMainMenubuttons();
+        mainMenuPresenter.setView(mainMenuViewImpl);
+        mainMenuPresenter.initMainMenubuttons();
+
+        ProductCatalogueModel productCatalogueModel = new ProductCatalogueModelImpl();
+        ProductCataloguePresenter productCataloguePresenter = new ProductCataloguePresenterImpl();
+        productCataloguePresenter.setModel(productCatalogueModel);
+        ProductCatalogueViewImpl productCatalogueView = new ProductCatalogueViewImpl();
+        productCataloguePresenter.setView(productCatalogueView);
+        productCataloguePresenter.init();
 
         new Navigator(this, this);
         getNavigator().addView(MainMenuViewImpl.NAME, mainMenuViewImpl);
+        getNavigator().addView(ProductCatalogueViewImpl.NAME, productCatalogueView);
         getNavigator().addView(StoreCatalogueViewImpl.NAME, StoreCatalogueViewImpl.class);
-        getNavigator().addView(ProductCatalogueViewImpl.NAME, ProductCatalogueViewImpl.class);
         getNavigator().navigateTo(MainMenuViewImpl.NAME);
     }
 
