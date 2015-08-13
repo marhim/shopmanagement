@@ -7,11 +7,12 @@ import de.david.shopmanagement.interfaces.CatalogueView;
  *
  */
 public class CatalogueViewImpl extends CustomComponent implements CatalogueView {
-    protected Layout mainLayout;
+    protected VerticalLayout mainLayout;
     protected HorizontalLayout headLayout;
-    protected Layout leftBodyLayout;
     protected GridLayout rightBodyLayout;
     protected HorizontalSplitPanel bodySplitPanel;
+    protected Panel leftContentPanel;
+    protected Panel rightContentPanel;
     protected Button mainMenuButton;
     protected Label title;
     protected Label contentTitle;
@@ -19,13 +20,22 @@ public class CatalogueViewImpl extends CustomComponent implements CatalogueView 
     public CatalogueViewImpl() {
         mainLayout = new VerticalLayout();
         headLayout = new HorizontalLayout();
-        headLayout.setSizeFull();
         bodySplitPanel = new HorizontalSplitPanel();
-        leftBodyLayout = new VerticalLayout();
+        leftContentPanel = new Panel();
+        rightContentPanel = new Panel();
         rightBodyLayout = new GridLayout(2,4);
-        rightBodyLayout.setSizeFull();
-        rightBodyLayout.setVisible(false);
+        rightContentPanel.setContent(rightBodyLayout);
         contentTitle = new Label();
+        initItemConfiguration();
+    }
+
+    protected void initItemConfiguration() {
+        headLayout.setSizeFull();
+        bodySplitPanel.setHeight(900, Unit.PIXELS);
+        bodySplitPanel.setSplitPosition(20.0f, Unit.PERCENTAGE);
+        bodySplitPanel.setLocked(true);
+        leftContentPanel.setSizeFull();
+        rightBodyLayout.setVisible(false);
     }
 
     protected void createMainMenuButton() {
@@ -48,10 +58,8 @@ public class CatalogueViewImpl extends CustomComponent implements CatalogueView 
     }
 
     protected void createSplitPanel() {
-        bodySplitPanel.setSplitPosition(20.0f, Unit.PERCENTAGE);
-        bodySplitPanel.setLocked(true);
-        bodySplitPanel.addComponent(leftBodyLayout);
-        bodySplitPanel.addComponent(rightBodyLayout);
+        bodySplitPanel.addComponent(leftContentPanel);
+        bodySplitPanel.addComponent(rightContentPanel);
     }
 
     protected void addComponentsToMainLayout() {

@@ -27,7 +27,6 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
     private TextField contentNameTextField;
     private TextArea contentDescriptionTextField;
     private TextField contentPriceTextField;
-    private Label leftLabel;
 
     public ProductCatalogueViewImpl() {
         super();
@@ -56,7 +55,7 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
     }
 
     public void createTree(Tree tree) {
-        leftBodyLayout.addComponent(tree);
+        leftContentPanel.setContent(tree);
     }
 
     private void createContent() {

@@ -9,6 +9,8 @@ import com.vaadin.ui.TextField;
 import de.david.shopmanagement.interfaces.StoreCataloguePresenter;
 import de.david.shopmanagement.interfaces.StoreCatalogueView;
 
+import java.util.Collection;
+
 /**
  * @author Marvin
  */
@@ -55,7 +57,7 @@ public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCa
         createStoreSelect();
         createSplitPanel();
 
-        leftBodyLayout.addComponent(leftLabel);
+        leftContentPanel.setContent(leftLabel);
         createContent();
 
         addComponentsToMainLayout();
@@ -66,11 +68,12 @@ public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCa
     private void createStoreSelect() {
         storeSelect.setCaption(STORE_SELECT_TITLE);
         storeSelect.setInputPrompt(PLEASE_SELECT);
-        storeSelect.addItem("Innenstadt");
-        storeSelect.addItem("Außenstadt");
-        storeSelect.addItem("Land");
         headLayout.addComponent(storeSelect);
         headLayout.setComponentAlignment(storeSelect, Alignment.TOP_RIGHT);
+    }
+
+    public void fillStoreSelect(Collection<String> storeStrings) {
+        storeSelect.addItems(storeStrings);
     }
 
     private void createContent() {

@@ -11,8 +11,10 @@ import com.vaadin.ui.UI;
 import de.david.shopmanagement.interfaces.*;
 import de.david.shopmanagement.model.MainMenuModelImpl;
 import de.david.shopmanagement.model.ProductCatalogueModelImpl;
+import de.david.shopmanagement.model.StoreCatalogueModelImpl;
 import de.david.shopmanagement.presenter.MainMenuPresenterImpl;
 import de.david.shopmanagement.presenter.ProductCataloguePresenterImpl;
+import de.david.shopmanagement.presenter.StoreCataloguePresenterImpl;
 import de.david.shopmanagement.util.CategoryData;
 import de.david.shopmanagement.views.MainMenuViewImpl;
 import de.david.shopmanagement.views.ProductCatalogueViewImpl;
@@ -57,10 +59,17 @@ public class MainUI extends UI {
         productCataloguePresenter.setView(productCatalogueView);
         productCataloguePresenter.init();
 
+        StoreCatalogueModel storeCatalogueModel = new StoreCatalogueModelImpl();
+        StoreCataloguePresenter storeCataloguePresenter = new StoreCataloguePresenterImpl();
+        storeCataloguePresenter.setModel(storeCatalogueModel);
+        StoreCatalogueViewImpl storeCatalogueView = new StoreCatalogueViewImpl();
+        storeCataloguePresenter.setView(storeCatalogueView);
+        storeCataloguePresenter.init();
+
         new Navigator(this, this);
         getNavigator().addView(MainMenuViewImpl.NAME, mainMenuViewImpl);
         getNavigator().addView(ProductCatalogueViewImpl.NAME, productCatalogueView);
-        getNavigator().addView(StoreCatalogueViewImpl.NAME, StoreCatalogueViewImpl.class);
+        getNavigator().addView(StoreCatalogueViewImpl.NAME, storeCatalogueView);
         getNavigator().navigateTo(MainMenuViewImpl.NAME);
     }
 
