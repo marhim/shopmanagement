@@ -7,7 +7,6 @@ import com.vaadin.ui.*;
 import de.david.shopmanagement.interfaces.ProductCataloguePresenter;
 import de.david.shopmanagement.interfaces.ProductCatalogueView;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +121,7 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-
+        rightBodyLayout.setVisible(false);
     }
 
     @Override
