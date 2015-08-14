@@ -1,6 +1,5 @@
 package de.david.shopmanagement.presenter;
 
-import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.ui.Tree;
@@ -20,7 +19,7 @@ import java.util.HashSet;
 /**
  * @author Marvin
  */
-public class ProductCataloguePresenterImpl implements ProductCataloguePresenter {
+public class ProductCataloguePresenterImpl implements ProductCataloguePresenter, ProductCatalogueView.ProductCatalogueViewListener {
     private static final String CONTAINER_PROPERTY = "name";
     private static final String CAPTION_TREE = "TreeCaption";
     private static final int SEARCH_PROPERTY_VALUE = 0;
@@ -34,7 +33,13 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter 
 
     public void init() {
         neo4JConnector = Neo4JConnector.getInstance();
+        graphDb = Neo4JConnector.getInstance().getDatabaseService();
         createTreeNodes();
+
+        productCatalogueView.addListener(this);
+
+        productCatalogueView.setContentVisibility(false);
+        productCatalogueView.hidePrice();
     }
 
     private void createTreeNodes() {
@@ -43,7 +48,6 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter 
 
         tree = new Tree(CAPTION_TREE);
         Label pc = neo4JConnector::getLabelProductcatalog;
-        graphDb = Neo4JConnector.getInstance().getDatabaseService();
 
         try (Transaction tx = graphDb.beginTx()) {
             Node rootNode = graphDb.findNode(pc, neo4JConnector.getNodePropertyIndex(), SEARCH_PROPERTY_VALUE);
@@ -67,6 +71,7 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter 
 
         tree.setContainerDataSource(container);
         tree.setItemCaptionPropertyId(CONTAINER_PROPERTY);
+        tree.setImmediate(true);
 
         productCatalogueView.createTree(tree);
     }
@@ -118,5 +123,38 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter 
     @Override
     public void setView(ProductCatalogueView productCatalogueView) {
         this.productCatalogueView = productCatalogueView;
+    }
+
+    @Override
+    public void treeItemClick(Node node) {
+        String contentName;
+        String contentDescription;
+        Double contentPrice = 0.d;
+
+        try (Transaction tx = graphDb.beginTx()) {
+            contentName = (String) node.getProperty(neo4JConnector.getNodePropertyName());
+            contentDescription = (String) node.getProperty(neo4JConnector.getNodePropertyDescription());
+            int childrenCount = 0;
+            for (Relationship ignored : node.getRelationships(Direction.OUTGOING)) {
+                childrenCount++;
+            }
+            if (childrenCount <= 0) {
+                contentPrice = (double) node.getProperty(neo4JConnector.getNodePropertyPrice());
+            }
+
+            tx.success();
+        }
+
+        productCatalogueView.setContentNameTextField(contentName);
+        productCatalogueView.setContentDescriptionTextField(contentDescription);
+        if (contentPrice > 0) {
+            productCatalogueView.showPrice();
+            productCatalogueView.setContentPriceTextField(contentPrice.toString());
+        } else {
+            productCatalogueView.hidePrice();
+        }
+        if (!productCatalogueView.getContentLayout().isVisible()) {
+            productCatalogueView.setContentVisibility(true);
+        }
     }
 }

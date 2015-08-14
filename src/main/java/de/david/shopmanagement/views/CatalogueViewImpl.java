@@ -35,7 +35,6 @@ public class CatalogueViewImpl extends CustomComponent implements CatalogueView 
         bodySplitPanel.setSplitPosition(20.0f, Unit.PERCENTAGE);
         bodySplitPanel.setLocked(true);
         leftContentPanel.setSizeFull();
-        rightBodyLayout.setVisible(false);
     }
 
     protected void createMainMenuButton() {
@@ -65,5 +64,10 @@ public class CatalogueViewImpl extends CustomComponent implements CatalogueView 
     protected void addComponentsToMainLayout() {
         mainLayout.addComponent(headLayout);
         mainLayout.addComponent(bodySplitPanel);
+    }
+
+    @Override
+    public void setContentVisibility(boolean visibility) {
+        rightBodyLayout.setVisible(visibility);
     }
 }

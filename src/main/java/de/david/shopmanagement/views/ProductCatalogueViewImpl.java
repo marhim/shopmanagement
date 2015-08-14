@@ -1,18 +1,21 @@
 package de.david.shopmanagement.views;
 
+import com.vaadin.data.Property;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.Tree;
+import com.vaadin.ui.*;
 import de.david.shopmanagement.interfaces.ProductCataloguePresenter;
 import de.david.shopmanagement.interfaces.ProductCatalogueView;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Transaction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Marvin
  */
-public class ProductCatalogueViewImpl extends CatalogueViewImpl implements ProductCatalogueView, View {
+public class ProductCatalogueViewImpl extends CatalogueViewImpl implements ProductCatalogueView, View, Tree.ValueChangeListener {
     public static final String NAME = "ProductCatalogue";
     public static final String DISPLAY_NAME = "Produktkatalog";
     private static final String CONTENT_TITLE = "Eigenschaften";
@@ -20,6 +23,7 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
     private static final String CONTENT_DESCRIPTION = "Beschreibung";
     private static final String CONTENT_PRICE = "Preis";
 
+    private List<ProductCatalogueViewListener> listeners = new ArrayList<>();
     private ProductCataloguePresenter productCataloguePresenter;
     private Label contentNameLabel;
     private Label contentDescriptionLabel;
@@ -27,6 +31,7 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
     private TextField contentNameTextField;
     private TextArea contentDescriptionTextField;
     private TextField contentPriceTextField;
+    private Tree tree;
 
     public ProductCatalogueViewImpl() {
         super();
@@ -55,7 +60,9 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
     }
 
     public void createTree(Tree tree) {
-        leftContentPanel.setContent(tree);
+        this.tree = tree;
+        this.tree.addValueChangeListener(this);
+        leftContentPanel.setContent(this.tree);
     }
 
     private void createContent() {
@@ -66,6 +73,36 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
         rightBodyLayout.addComponent(contentDescriptionTextField, 1, 2);
         rightBodyLayout.addComponent(contentPriceLabel, 0, 3);
         rightBodyLayout.addComponent(contentPriceTextField, 1, 3);
+    }
+
+    public void setContentNameTextField(String nameTextField) {
+        contentNameTextField.setValue(nameTextField);
+    }
+
+    public void setContentDescriptionTextField(String descriptionTextField) {
+        contentDescriptionTextField.setValue(descriptionTextField);
+    }
+
+    public void setContentPriceTextField(String priceTextField) {
+        contentPriceTextField.setValue(priceTextField);
+    }
+
+    public void showPrice() {
+        setPriceVisibility(true);
+    }
+
+    public void hidePrice() {
+        setPriceVisibility(false);
+    }
+
+    private void setPriceVisibility(boolean visibility) {
+        contentPriceLabel.setVisible(visibility);
+        contentPriceTextField.setVisible(visibility);
+    }
+
+    @Override
+    public Layout getContentLayout() {
+        return rightBodyLayout;
     }
 
     @Override
@@ -79,7 +116,20 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
     }
 
     @Override
+    public void addListener(ProductCatalogueViewListener listener) {
+        listeners.add(listener);
+    }
+
+    @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
 
+    }
+
+    @Override
+    public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
+        final Object id = tree.getValue();
+        for (ProductCatalogueViewListener listener : listeners) {
+            listener.treeItemClick((Node) id);
+        }
     }
 }
