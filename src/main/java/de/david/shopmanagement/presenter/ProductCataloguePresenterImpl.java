@@ -12,9 +12,7 @@ import de.david.shopmanagement.interfaces.ProductCatalogueView;
 import org.neo4j.graphdb.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 
 /**
  * @author Marvin
@@ -127,11 +125,13 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
 
     @Override
     public void treeItemClick(Node node) {
+        Long nodeId;
         String contentName;
         String contentDescription;
         Double contentPrice = 0.d;
 
         try (Transaction tx = graphDb.beginTx()) {
+            nodeId = node.getId();
             contentName = (String) node.getProperty(neo4JConnector.getNodePropertyName());
             contentDescription = (String) node.getProperty(neo4JConnector.getNodePropertyDescription());
             int childrenCount = 0;
@@ -145,6 +145,7 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
             tx.success();
         }
 
+        productCatalogueView.setHiddenNodeId(nodeId.toString());
         productCatalogueView.setContentNameTextField(contentName);
         productCatalogueView.setContentDescriptionTextField(contentDescription);
         if (contentPrice > 0) {

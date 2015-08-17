@@ -11,6 +11,10 @@ public interface ProductCatalogueView {
 
     void createTree(Tree tree);
 
+    void setHiddenNodeId(String nodeId);
+
+    String getHiddenNodeId();
+
     void setContentNameTextField(String nameTextField);
 
     void setContentDescriptionTextField(String descriptionTextField);

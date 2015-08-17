@@ -64,6 +64,16 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
         leftContentPanel.setContent(this.tree);
     }
 
+    @Override
+    public void setHiddenNodeId(String nodeId) {
+        hiddenNodeID.setValue(nodeId);
+    }
+
+    @Override
+    public String getHiddenNodeId() {
+        return hiddenNodeID.getValue();
+    }
+
     private void createContent() {
         super.createContentTitle();
         rightBodyLayout.addComponent(contentNameLabel, 0, 1);
