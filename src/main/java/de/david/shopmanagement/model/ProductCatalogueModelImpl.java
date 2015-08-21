@@ -8,6 +8,8 @@ import de.david.shopmanagement.database.Neo4JConnector;
 import de.david.shopmanagement.exceptions.MissingRootNodeException;
 import de.david.shopmanagement.interfaces.ProductCatalogueModel;
 import de.david.shopmanagement.util.NodeData;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.*;
 
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.Collections;
  * @author Marvin
  */
 public class ProductCatalogueModelImpl implements ProductCatalogueModel {
+    private static final Logger logger = LogManager.getLogger(ProductCatalogueModelImpl.class);
     private static final String CONTAINER_PROPERTY = "name";
     private static final String CAPTION_TREE = "TreeCaption";
     private static final int SEARCH_PROPERTY_VALUE = 0;
@@ -74,12 +77,31 @@ public class ProductCatalogueModelImpl implements ProductCatalogueModel {
     }
 
     @Override
+    public boolean deleteNodeWithRelationships(Node node) {
+        boolean ret = false;
+
+        try (Transaction tx = graphDb.beginTx()) {
+            for (Relationship rel : node.getRelationships(Direction.INCOMING)) {
+                rel.delete();
+            }
+            node.delete();
+
+            ret = true;
+            tx.success();
+        } catch (TransactionFailureException e) {
+            logger.error(e.getMessage());
+        }
+
+        return ret;
+    }
+
+    @Override
     public void createTreeNodes() {
         container = new HierarchicalContainer();
         container.addContainerProperty(CONTAINER_PROPERTY, String.class, null);
 
         treeNodes = new Tree(CAPTION_TREE);
-        Label pc = neo4JConnector::getLabelProductcatalog;
+        Label pc = neo4JConnector.getLabelProductcatalog();
 
         try (Transaction tx = graphDb.beginTx()) {
             Node rootNode = graphDb.findNode(pc, neo4JConnector.getNodePropertyIndex(), SEARCH_PROPERTY_VALUE);

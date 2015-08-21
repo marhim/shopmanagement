@@ -1,5 +1,6 @@
 package de.david.shopmanagement.presenter;
 
+import com.vaadin.data.Property;
 import com.vaadin.event.Action;
 import com.vaadin.ui.Tree;
 import de.david.shopmanagement.database.Neo4JConnector;
@@ -7,15 +8,22 @@ import de.david.shopmanagement.interfaces.ProductCatalogueModel;
 import de.david.shopmanagement.interfaces.ProductCataloguePresenter;
 import de.david.shopmanagement.interfaces.ProductCatalogueView;
 import de.david.shopmanagement.util.NodeData;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.neo4j.cypher.EntityNotFoundException;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
+
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author Marvin
  */
 public class ProductCataloguePresenterImpl implements ProductCataloguePresenter, ProductCatalogueView.ProductCatalogueViewListener {
-
+    private static final Logger logger = LogManager.getLogger(ProductCataloguePresenterImpl.class);
     private static final Action ACTION_ADD_PRODUCT = new Action("Produkt hinzufügen");
     private static final Action ACTION_ADD_PRODUCT_GROUP = new Action("Produktgruppe hinzufügen");
     private static final Action ACTION_ADD_PRODUCT_VARIANT = new Action("Produktvariante hinzufügen");
@@ -32,6 +40,7 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
         neo4JConnector = Neo4JConnector.getInstance();
         graphDb = neo4JConnector.getDatabaseService();
         setTreeNodesView();
+        tree.addValueChangeListener((Property.ValueChangeListener) productCatalogueView);
 
         productCatalogueView.addListener(this);
 
@@ -85,7 +94,7 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
                 if (target == null) {
                     return new Action[] {ACTION_ADD_PRODUCT_GROUP, ACTION_ADD_PRODUCT};
                 } else if (tree.areChildrenAllowed(target)) {
-                    return new Action[] {ACTION_ADD_PRODUCT_GROUP, ACTION_ADD_PRODUCT, ACTION_ADD_PRODUCT_VARIANT, ACTION_REMOVE_ITEM };
+                    return new Action[] {ACTION_ADD_PRODUCT_GROUP, ACTION_ADD_PRODUCT, ACTION_ADD_PRODUCT_VARIANT };
                 } else {
                     return new Action[] { ACTION_REMOVE_ITEM };
                 }
@@ -98,9 +107,17 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
                 } else if (action == ACTION_ADD_PRODUCT_GROUP) {
 
                 } else if (action == ACTION_ADD_PRODUCT_VARIANT) {
+                    // TODO: not finished: adding a product variant
+                    /*try (Transaction tx = graphDb.beginTx()) {
+                        Node newProductVariant = graphDb.createNode(neo4JConnector.getLabelProductcatalog());
+                        newProductVariant.setProperty(neo4JConnector.getNodePropertyIndex(), neo4JConnector.getNextIndex());
 
+                        tx.success();
+                    }*/
                 } else if (action == ACTION_REMOVE_ITEM) {
-
+                    tree.removeItem(target);
+                    productCatalogueView.updateTree(tree);
+                    productCatalogueModel.deleteNodeWithRelationships((Node) target);
                 }
             }
         });
@@ -168,28 +185,37 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
         }
     }
 
-    private void saveNode(Node node) {
+    private boolean saveNode(Node node) {
+        boolean ret = false;
         NodeData nodeData = new NodeData();
         try (Transaction tx = graphDb.beginTx()) {
-            nodeData.setNodeId(node.getId());
+            long nodeIdLong = node.getId();
+            nodeData.setNodeId(nodeIdLong);
 
+            ret = true;
             tx.success();
+        } catch (EntityNotFoundException e) {
+            logger.error(e.getMessage());
         }
-        nodeData.setNodeName(productCatalogueView.getContentNameTextFieldValue());
-        nodeData.setNodeDescription(productCatalogueView.getContentDescriptionTextAreaValue());
-        try (Transaction tx = graphDb.beginTx()) {
-            boolean isTxSuccessful = false;
-            if (node.hasProperty(neo4JConnector.getNodePropertyPrice())) {
-                isTxSuccessful = nodeData.setNodePrice(productCatalogueView.getContentPriceTextFieldValue());
+        if (ret) {
+            nodeData.setNodeName(productCatalogueView.getContentNameTextFieldValue());
+            nodeData.setNodeDescription(productCatalogueView.getContentDescriptionTextAreaValue());
+            try (Transaction tx = graphDb.beginTx()) {
+                ret = false;
+                if (node.hasProperty(neo4JConnector.getNodePropertyPrice())) {
+                    ret = nodeData.setNodePrice(productCatalogueView.getContentPriceTextFieldValue());
+                }
+
+                if (ret) {
+                    tx.success();
+                } else {
+                    tx.failure();
+                }
             }
 
-            if (isTxSuccessful) {
-                tx.success();
-            } else {
-                tx.failure();
-            }
+            ret = productCatalogueModel.saveNode(nodeData);
         }
 
-        productCatalogueModel.saveNode(nodeData);
+        return ret;
     }
 }

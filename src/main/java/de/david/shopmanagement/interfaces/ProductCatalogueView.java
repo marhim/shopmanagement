@@ -13,6 +13,8 @@ public interface ProductCatalogueView {
 
     void setTree(Tree tree);
 
+    void updateTree(Tree tree);
+
     void setContentNameTextField(TextField contentNameTextField);
 
     TextField getContentNameTextField();

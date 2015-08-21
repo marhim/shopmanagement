@@ -73,8 +73,12 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
 
     public void setTree(Tree tree) {
         this.tree = tree;
-        this.tree.addValueChangeListener(this);
         leftContentPanel.setContent(this.tree);
+    }
+
+    @Override
+    public void updateTree(Tree tree) {
+        this.tree = tree;
     }
 
     @Override

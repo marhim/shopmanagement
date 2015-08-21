@@ -2,13 +2,16 @@ package de.david.shopmanagement.database;
 
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
+import org.neo4j.helpers.collection.IteratorUtil;
+
+import java.util.Iterator;
 
 /**
  * @author Marvin
  */
 public class Neo4JConnector {
-    private static final String LABEL_PRODUCTCATALOG = "ProductCatalog";
-    private static final String LABEL_STORE = "Store";
+    private static final Label LABEL_PRODUCTCATALOG = DynamicLabel.label("ProductCatalog");
+    private static final Label LABEL_STORE = DynamicLabel.label("Store");
     private static final String NODE_PROPERTY_NAME = "name";
     private static final String NODE_PROPERTY_INDEX = "index";
     private static final String NODE_PROPERTY_DESCRIPTION = "description";
@@ -55,11 +58,11 @@ public class Neo4JConnector {
         return Neo4JConnector.graphDb;
     }
 
-    public String getLabelProductcatalog() {
+    public Label getLabelProductcatalog() {
         return LABEL_PRODUCTCATALOG;
     }
 
-    public String getLabelStore() {
+    public Label getLabelStore() {
         return LABEL_STORE;
     }
 
@@ -77,6 +80,21 @@ public class Neo4JConnector {
 
     public String getNodePropertyPrice() {
         return NODE_PROPERTY_PRICE;
+    }
+
+    public int getNextIndex() {
+        int ret = -1;
+        try (Transaction tx = graphDb.beginTx();
+             Result result = graphDb.execute("MATCH (pc:ProductCatalog) RETURN pc ORDER BY pc.index DESC LIMIT 1")) {
+            if (result.hasNext()) {
+                Iterator<Node> n_column = result.columnAs("pc");
+                for (Node node : IteratorUtil.asIterable(n_column)) {
+                    ret = (int) node.getProperty(NODE_PROPERTY_INDEX);
+                }
+                ret++;
+            }
+        }
+        return ret;
     }
 
     private static void registerShutdownHook(final GraphDatabaseService graphDb) {

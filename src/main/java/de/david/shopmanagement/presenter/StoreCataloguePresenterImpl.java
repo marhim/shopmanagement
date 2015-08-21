@@ -25,7 +25,7 @@ public class StoreCataloguePresenterImpl implements StoreCataloguePresenter {
 
     private void createStoreSelect() {
         Collection<String> storeNames = new ArrayList<>();
-        Label store = () -> Neo4JConnector.getInstance().getLabelStore();
+        Label store = Neo4JConnector.getInstance().getLabelStore();
         graphDb = Neo4JConnector.getInstance().getDatabaseService();
 
         try (Transaction tx = graphDb.beginTx()) {
