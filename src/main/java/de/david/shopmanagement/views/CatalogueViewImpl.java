@@ -16,7 +16,6 @@ public class CatalogueViewImpl extends CustomComponent implements CatalogueView 
     protected Button mainMenuButton;
     protected Label title;
     protected Label contentTitle;
-    protected TextField hiddenNodeID;
 
     public CatalogueViewImpl() {
         mainLayout = new VerticalLayout();
@@ -27,7 +26,6 @@ public class CatalogueViewImpl extends CustomComponent implements CatalogueView 
         rightBodyLayout = new GridLayout(2,4);
         rightContentPanel.setContent(rightBodyLayout);
         contentTitle = new Label();
-        hiddenNodeID = new TextField();
         initItemConfiguration();
     }
 
@@ -37,7 +35,6 @@ public class CatalogueViewImpl extends CustomComponent implements CatalogueView 
         bodySplitPanel.setSplitPosition(20.0f, Unit.PERCENTAGE);
         bodySplitPanel.setLocked(true);
         leftContentPanel.setSizeFull();
-        hiddenNodeID.setVisible(false);
     }
 
     protected void createMainMenuButton() {

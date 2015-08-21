@@ -1,7 +1,6 @@
 package de.david.shopmanagement.database;
 
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
 /**
@@ -33,6 +32,23 @@ public class Neo4JConnector {
             Neo4JConnector.instance = new Neo4JConnector();
         }
         return Neo4JConnector.instance;
+    }
+
+    public boolean hasChildren(Node node) {
+        boolean ret = false;
+        int childrenCount = 0;
+        try (Transaction tx = graphDb.beginTx()) {
+            for (Relationship ignored : node.getRelationships(Direction.OUTGOING)) {
+                childrenCount++;
+            }
+
+            tx.success();
+        }
+        if (childrenCount > 0) {
+            ret = true;
+        }
+
+        return ret;
     }
 
     public GraphDatabaseService getDatabaseService() {

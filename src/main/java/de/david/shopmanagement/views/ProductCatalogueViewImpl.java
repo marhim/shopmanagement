@@ -21,6 +21,7 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
     private static final String CONTENT_NAME = "Name";
     private static final String CONTENT_DESCRIPTION = "Beschreibung";
     private static final String CONTENT_PRICE = "Preis";
+    private static final int TEXT_CHANGE_TIMEOUT = 5000;
 
     private List<ProductCatalogueViewListener> listeners = new ArrayList<>();
     private ProductCataloguePresenter productCataloguePresenter;
@@ -28,7 +29,7 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
     private Label contentDescriptionLabel;
     private Label contentPriceLabel;
     private TextField contentNameTextField;
-    private TextArea contentDescriptionTextField;
+    private TextArea contentDescriptionTextArea;
     private TextField contentPriceTextField;
     private Tree tree;
 
@@ -39,9 +40,10 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
         contentDescriptionLabel = new Label(CONTENT_DESCRIPTION);
         contentPriceLabel = new Label(CONTENT_PRICE);
         contentNameTextField = new TextField();
-        contentDescriptionTextField = new TextArea();
+        contentDescriptionTextArea = new TextArea();
         contentPriceTextField = new TextField();
         init();
+        config();
     }
 
     private void init() {
@@ -58,20 +60,51 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
         setCompositionRoot(mainLayout);
     }
 
-    public void createTree(Tree tree) {
+    private void config() {
+        contentNameTextField.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.TIMEOUT);
+        contentNameTextField.setTextChangeTimeout(TEXT_CHANGE_TIMEOUT);
+
+        contentDescriptionTextArea.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.TIMEOUT);
+        contentDescriptionTextArea.setTextChangeTimeout(TEXT_CHANGE_TIMEOUT);
+
+        contentPriceTextField.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.TIMEOUT);
+        contentPriceTextField.setTextChangeTimeout(TEXT_CHANGE_TIMEOUT);
+    }
+
+    public void setTree(Tree tree) {
         this.tree = tree;
         this.tree.addValueChangeListener(this);
         leftContentPanel.setContent(this.tree);
     }
 
     @Override
-    public void setHiddenNodeId(String nodeId) {
-        hiddenNodeID.setValue(nodeId);
+    public void setContentNameTextField(TextField contentNameTextField) {
+        this.contentNameTextField = contentNameTextField;
     }
 
     @Override
-    public String getHiddenNodeId() {
-        return hiddenNodeID.getValue();
+    public TextField getContentNameTextField() {
+        return contentNameTextField;
+    }
+
+    @Override
+    public void setContentDescriptionTextArea(TextArea contentDescriptionTextArea) {
+        this.contentDescriptionTextArea = contentDescriptionTextArea;
+    }
+
+    @Override
+    public TextArea getContentDescriptionTextArea() {
+        return contentDescriptionTextArea;
+    }
+
+    @Override
+    public void setContentPriceTextField(TextField contentPriceTextField) {
+        this.contentPriceTextField = contentPriceTextField;
+    }
+
+    @Override
+    public TextField getContentPriceTextField() {
+        return contentPriceTextField;
     }
 
     private void createContent() {
@@ -79,27 +112,47 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
         rightBodyLayout.addComponent(contentNameLabel, 0, 1);
         rightBodyLayout.addComponent(contentNameTextField, 1, 1);
         rightBodyLayout.addComponent(contentDescriptionLabel, 0, 2);
-        rightBodyLayout.addComponent(contentDescriptionTextField, 1, 2);
+        rightBodyLayout.addComponent(contentDescriptionTextArea, 1, 2);
         rightBodyLayout.addComponent(contentPriceLabel, 0, 3);
         rightBodyLayout.addComponent(contentPriceTextField, 1, 3);
     }
 
-    public void setContentNameTextField(String nameTextField) {
-        contentNameTextField.setValue(nameTextField);
+    @Override
+    public void setContentNameTextFieldValue(String nameTextFieldValue) {
+        contentNameTextField.setValue(nameTextFieldValue);
     }
 
-    public void setContentDescriptionTextField(String descriptionTextField) {
-        contentDescriptionTextField.setValue(descriptionTextField);
+    @Override
+    public String getContentNameTextFieldValue() {
+        return contentNameTextField.getValue();
     }
 
-    public void setContentPriceTextField(String priceTextField) {
-        contentPriceTextField.setValue(priceTextField);
+    @Override
+    public void setContentDescriptionTextAreaValue(String descriptionTextAreaValue) {
+        contentDescriptionTextArea.setValue(descriptionTextAreaValue);
     }
 
+    @Override
+    public String getContentDescriptionTextAreaValue() {
+        return contentDescriptionTextArea.getValue();
+    }
+
+    @Override
+    public void setContentPriceTextFieldValue(String priceTextFieldValue) {
+        contentPriceTextField.setValue(priceTextFieldValue);
+    }
+
+    @Override
+    public String getContentPriceTextFieldValue() {
+        return contentPriceTextField.getValue();
+    }
+
+    @Override
     public void showPrice() {
         setPriceVisibility(true);
     }
 
+    @Override
     public void hidePrice() {
         setPriceVisibility(false);
     }

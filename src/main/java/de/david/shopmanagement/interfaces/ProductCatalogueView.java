@@ -1,6 +1,8 @@
 package de.david.shopmanagement.interfaces;
 
 import com.vaadin.ui.Layout;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.Tree;
 import org.neo4j.graphdb.Node;
 
@@ -9,17 +11,31 @@ import org.neo4j.graphdb.Node;
  */
 public interface ProductCatalogueView {
 
-    void createTree(Tree tree);
+    void setTree(Tree tree);
 
-    void setHiddenNodeId(String nodeId);
+    void setContentNameTextField(TextField contentNameTextField);
 
-    String getHiddenNodeId();
+    TextField getContentNameTextField();
 
-    void setContentNameTextField(String nameTextField);
+    void setContentDescriptionTextArea(TextArea contentDescriptionTextArea);
 
-    void setContentDescriptionTextField(String descriptionTextField);
+    TextArea getContentDescriptionTextArea();
 
-    void setContentPriceTextField(String priceTextField);
+    void setContentPriceTextField(TextField contentPriceTextField);
+
+    TextField getContentPriceTextField();
+
+    void setContentNameTextFieldValue(String nameTextFieldValue);
+
+    String getContentNameTextFieldValue();
+
+    void setContentDescriptionTextAreaValue(String descriptionTextAreaValue);
+
+    String getContentDescriptionTextAreaValue();
+
+    void setContentPriceTextFieldValue(String priceTextFieldValue);
+
+    String getContentPriceTextFieldValue();
 
     void setContentVisibility(boolean visibility);
 
