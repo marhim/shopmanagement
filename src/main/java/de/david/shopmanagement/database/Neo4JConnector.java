@@ -1,15 +1,19 @@
 package de.david.shopmanagement.database;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.helpers.collection.IteratorUtil;
 
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author Marvin
  */
 public class Neo4JConnector {
+    private static final Logger logger = LogManager.getLogger(Neo4JConnector.class);
     private static final Label LABEL_PRODUCTCATALOG = DynamicLabel.label("ProductCatalog");
     private static final Label LABEL_STORE = DynamicLabel.label("Store");
     private static final String NODE_PROPERTY_NAME = "name";
@@ -84,15 +88,24 @@ public class Neo4JConnector {
 
     public int getNextIndex() {
         int ret = -1;
+        String varName = "n";
+        String cypherStatement = "MATCH (" + varName + ":ProductCatalog) RETURN max(" + varName + ".index)";
         try (Transaction tx = graphDb.beginTx();
-             Result result = graphDb.execute("MATCH (pc:ProductCatalog) RETURN pc ORDER BY pc.index DESC LIMIT 1")) {
-            if (result.hasNext()) {
-                Iterator<Node> n_column = result.columnAs("pc");
-                for (Node node : IteratorUtil.asIterable(n_column)) {
-                    ret = (int) node.getProperty(NODE_PROPERTY_INDEX);
+             Result result = graphDb.execute(cypherStatement)) {
+            while (result.hasNext()) {
+                Map<String, Object> row = result.next();
+                for (Map.Entry<String,Object> column : row.entrySet()) {
+                    if (ret <= -1) {
+                        ret = (int) column.getValue();
+                    }
                 }
-                ret++;
             }
+            if (ret > -1) {
+                ret++;
+            } else {
+                logger.error("Next Index was not found. Index: " + ret + " Result as String: " + result.resultAsString());
+            }
+            tx.success();
         }
         return ret;
     }

@@ -142,7 +142,9 @@ public class ProductCatalogueModelImpl implements ProductCatalogueModel {
                 fillProductCatalogueTreeRek(childNode, child);
             }
         } else {
-            container.setChildrenAllowed(childNode, false);
+            if (childNode.hasProperty(neo4JConnector.getNodePropertyPrice())) {
+                container.setChildrenAllowed(childNode, false);
+            }
         }
     }
 
