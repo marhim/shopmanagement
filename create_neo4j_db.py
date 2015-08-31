@@ -23,6 +23,8 @@ class NodesAndRelations(object):
         self.nodes = list()
         self.relations = list()
 
+product_catalog = NodesAndRelations()
+
 
 def bulk_create(data):
     data = list(data)
@@ -36,6 +38,9 @@ def by_index(index):
 
 
 def create_product_catalog(num_levels, num_children):
+    with open('product_names.json', encoding='utf-8') as product_names_file:
+        all_product_names = json.load(product_names_file)
+
     def create_node(node_index, node_level):
         if node_level == num_levels:
             node_type = 'productVariant'
@@ -46,15 +51,13 @@ def create_product_catalog(num_levels, num_children):
 
         properties = dict(
             index=node_index,
-            name='catalog item ' + str(node_index),
+            name=random.choice(all_product_names),
             type=node_type,
             price=round(0.90 + 24.0 * random.random(), ndigits=2),
             description=random.choice(['foo', 'bar', 'baz', 'glory'])
         )
 
         return Node('ProductCatalog', **properties)
-
-    product_catalog = NodesAndRelations()
 
     logger.info('Creating product catalog nodes...')
 
@@ -87,13 +90,10 @@ def create_product_catalog(num_levels, num_children):
 
     bulk_create(data=product_catalog.relations)
 
-    return product_catalog
-
 
 def create_stores():
     logger.info('Creating stores...')
 
-    # https://en.wikipedia.org/wiki/List_of_United_States_cities_by_population
     with open('store_names.json') as store_names_file:
         all_store_names = json.load(store_names_file)
 
@@ -137,6 +137,6 @@ def create_store_catalogs():
 logger.info('Clearing data base...')
 graph.delete_all()
 
-product_catalog = create_product_catalog(num_levels=5, num_children=5)
+create_product_catalog(num_levels=5, num_children=5)
 stores = create_stores()
 create_store_catalogs()
