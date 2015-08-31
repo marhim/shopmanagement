@@ -59,3 +59,4 @@ dependency-reduced-pom.xml
 
 
 neo4j-database/messages.log
+neo4j-database/neostore.transaction.db.*
