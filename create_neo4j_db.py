@@ -5,6 +5,7 @@ import config.local
 import json
 import logging
 import random
+import string
 
 from py2neo import Graph, Node, Relationship
 
@@ -35,21 +36,21 @@ def by_index(index):
 
 
 def create_product_catalog(num_levels, num_children):
-    def create_node(index, level):
-        if level == num_levels:
+    def create_node(node_index, node_level):
+        if node_level == num_levels:
             node_type = 'productVariant'
-        elif level == num_levels - 1:
+        elif node_level == num_levels - 1:
             node_type = 'product'
         else:
             node_type = 'productGroup'
 
-        properties = {
-            'index': index,
-            'name': 'catalog item ' + str(index),
-            'type': node_type,
-            'price': round(0.90 + 24.0 * random.random(), ndigits=2),
-            'description': random.choice(['foo', 'bar', 'baz', 'glory'])
-        }
+        properties = dict(
+            index=node_index,
+            name='catalog item ' + str(node_index),
+            type=node_type,
+            price=round(0.90 + 24.0 * random.random(), ndigits=2),
+            description=random.choice(['foo', 'bar', 'baz', 'glory'])
+        )
 
         return Node('ProductCatalog', **properties)
 
@@ -57,14 +58,14 @@ def create_product_catalog(num_levels, num_children):
 
     logger.info('Creating product catalog nodes...')
 
-    root_node = create_node(index=0, level=0)
+    root_node = create_node(node_index=0, node_level=0)
     root_node.parent = None
     product_catalog.nodes.append(root_node)
 
     for level in range(1, num_levels + 1):
         offset = sum(num_children ** l for l in range(level))
         for i in range(offset, offset + num_children ** level):
-            product_catalog.nodes.append(create_node(index=i, level=level))
+            product_catalog.nodes.append(create_node(node_index=i, node_level=level))
 
     bulk_create(data=product_catalog.nodes)
 
@@ -106,14 +107,7 @@ def create_stores():
     return nodes
 
 
-logger.info('Clearing data base...')
-graph.delete_all()
-
-product_catalog = create_product_catalog(num_levels=5, num_children=5)
-stores = create_stores()
-
-
-def create_store_catalogs(product_catalog, stores):
+def create_store_catalogs():
 
     logger.info('Creating store catalog nodes...')
     for store in stores:
@@ -130,10 +124,19 @@ def create_store_catalogs(product_catalog, stores):
         store_catalog.nodes = list(set(store_catalog.nodes))
 
         for catalog_node in store_catalog.nodes:
-            sold_in = Relationship(catalog_node, 'IS_SOLD_IN', store)
+            properties = dict(
+                amount=random.randint(1, 100),
+                shelf=str(random.randint(1, 10)) + random.choice(string.ascii_lowercase)
+            )
+            sold_in = Relationship(catalog_node, 'IS_SOLD_IN', store, **properties)
             store_catalog.relations.append(sold_in)
 
         bulk_create(data=store_catalog.relations)
 
 
-create_store_catalogs(product_catalog=product_catalog, stores=stores)
+logger.info('Clearing data base...')
+graph.delete_all()
+
+product_catalog = create_product_catalog(num_levels=5, num_children=5)
+stores = create_stores()
+create_store_catalogs()
