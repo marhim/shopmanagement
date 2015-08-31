@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import config.local
 
 import logging
@@ -18,10 +20,18 @@ def bulk_create(data):
 
 
 def create_product_catalog(num_levels, num_children):
-    def create_node(index):
+    def create_node(index, level):
+        if level == num_levels:
+            node_type = 'productVariant'
+        elif level == num_levels - 1:
+            node_type = 'product'
+        else:
+            node_type = 'productGroup'
+
         properties = {
             'index': index,
             'name': 'catalog item ' + str(index),
+            'type': node_type,
             'price': round(0.90 + 24.0 * random.random(), ndigits=2),
             'description': random.choice(['foo', 'bar', 'baz', 'glory'])
         }
@@ -31,13 +41,13 @@ def create_product_catalog(num_levels, num_children):
     logger.info('Creating nodes...')
     nodes = []
 
-    root_node = create_node(index=0)
+    root_node = create_node(index=0, level=0)
     nodes.append(root_node)
 
     for level in range(1, num_levels + 1):
         offset = sum(num_children ** l for l in range(level))
         for i in range(offset, offset + num_children ** level):
-            nodes.append(create_node(index=i))
+            nodes.append(create_node(index=i, level=level))
 
     bulk_create(data=nodes)
 
