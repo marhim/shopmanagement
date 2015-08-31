@@ -9,6 +9,9 @@ import random
 from py2neo import Graph, Node, Relationship
 
 logger = logging.getLogger('neo4j')
+logger.setLevel(logging.INFO)
+logger.addHandler(logging.StreamHandler())
+
 graph = Graph()
 
 TRANSACTON_BULK_SIZE = 100
