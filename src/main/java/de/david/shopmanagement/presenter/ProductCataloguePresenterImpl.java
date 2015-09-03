@@ -137,30 +137,8 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
             public void handleAction(Action action, Object sender, Object target) {
                 if (action == ACTION_ADD_PRODUCT) {
                     //createNewNode((Node) target, neo4JConnector.getNodeTypeProduct());
-                    Node parent = (Node) target;
-                    try (Transaction tx = graphDb.beginTx()) {
-                        Node newProduct = graphDb.createNode(neo4JConnector.getLabelProductcatalog());
-                        newProduct.setProperty(neo4JConnector.getNodePropertyIndex(), neo4JConnector.getNextIndex());
-                        newProduct.setProperty(neo4JConnector.getNodePropertyName(), DEFAULT_NEW_NODE_NAME);
-                        newProduct.setProperty(neo4JConnector.getNodePropertyDescription(), DEFAULT_NEW_NODE_DESCRIPTION);
-                        newProduct.setProperty(neo4JConnector.getNodePropertyPrice(), DEFAULT_NEW_NODE_PRICE);
-                        newProduct.setProperty(neo4JConnector.getNodePropertyType(), neo4JConnector.getNodeTypeProduct());
-
-                        parent.createRelationshipTo(newProduct, Neo4JConnector.RelTypes.IS_PARENT_OF);
-                        Item newItem = tree.addItem(newProduct);
-                        newItem.getItemProperty(neo4JConnector.getNodePropertyName()).setValue(newProduct.getProperty(neo4JConnector.getNodePropertyName()));
-                        tree.setParent(newProduct, parent);
-
-                        currentNode = newProduct;
-                        tree.select(currentNode);
-
-                        tx.success();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        currentNode = null;
-                    }
                 } else if (action == ACTION_ADD_PRODUCT_GROUP) {
-                    createNewNode((Node) target, neo4JConnector.getNodeTypeProductgroup());
+                    //createNewNode((Node) target, neo4JConnector.getNodeTypeProductgroup());
                 } else if (action == ACTION_ADD_PRODUCT_VARIANT) {
                     createNewNode((Node) target, neo4JConnector.getNodeTypeProductvariant());
                 } else if (action == ACTION_REMOVE_ITEM) {
