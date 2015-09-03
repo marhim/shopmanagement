@@ -101,13 +101,12 @@ public class ProductCatalogueModelImpl implements ProductCatalogueModel {
         container.addContainerProperty(CONTAINER_PROPERTY, String.class, null);
 
         treeNodes = new Tree(CAPTION_TREE);
-        Label pc = neo4JConnector.getLabelProductcatalog();
 
         try (Transaction tx = graphDb.beginTx()) {
-            Node rootNode = graphDb.findNode(pc, neo4JConnector.getNodePropertyIndex(), SEARCH_PROPERTY_VALUE);
+            Node rootNode = graphDb.findNode(neo4JConnector.getLabelProductcatalog(), neo4JConnector.getNodePropertyIndex(), SEARCH_PROPERTY_VALUE);
             if (rootNode != null) {
                 ArrayList<Node> rootChildren = new ArrayList<>();
-                for (Relationship rootRelations : rootNode.getRelationships(Direction.OUTGOING)) {
+                for (Relationship rootRelations : rootNode.getRelationships(Neo4JConnector.RelTypes.IS_PARENT_OF, Direction.OUTGOING)) {
                     rootChildren.add(rootRelations.getEndNode());
                 }
                 Collections.sort(rootChildren, new NodeNameComparator());
@@ -132,19 +131,19 @@ public class ProductCatalogueModelImpl implements ProductCatalogueModel {
         if (parentNode != null) {
             container.setParent(childNode, parentNode);
         }
-        ArrayList<Node> children = new ArrayList<>();
-        for (Relationship r : childNode.getRelationships(Direction.OUTGOING)) {
-            children.add(r.getEndNode());
-        }
-        if (!children.isEmpty()) {
-            Collections.sort(children, new NodeNameComparator());
-            for (Node child : children) {
-                fillProductCatalogueTreeRek(childNode, child);
+        if (!childNode.getProperty(neo4JConnector.getNodePropertyType()).toString().equals(neo4JConnector.getNodeTypeProductvariant())) {
+            ArrayList<Node> children = new ArrayList<>();
+            for (Relationship r : childNode.getRelationships(Neo4JConnector.RelTypes.IS_PARENT_OF, Direction.OUTGOING)) {
+                children.add(r.getEndNode());
+            }
+            if (children.size() > 0) {
+                Collections.sort(children, new NodeNameComparator());
+                for (Node child : children) {
+                    fillProductCatalogueTreeRek(childNode, child);
+                }
             }
         } else {
-            if (childNode.hasProperty(neo4JConnector.getNodePropertyPrice())) {
-                container.setChildrenAllowed(childNode, false);
-            }
+            container.setChildrenAllowed(childNode, false);
         }
     }
 

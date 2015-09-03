@@ -20,13 +20,17 @@ public class Neo4JConnector {
     private static final String NODE_PROPERTY_INDEX = "index";
     private static final String NODE_PROPERTY_DESCRIPTION = "description";
     private static final String NODE_PROPERTY_PRICE = "price";
+    private static final String NODE_PROPERTY_TYPE = "type";
+    private static final String NODE_TYPE_PRODUCTGROUP = "productGroup";
+    private static final String NODE_TYPE_PRODUCT = "product";
+    private static final String NODE_TYPE_PRODUCTVARIANT = "productVariant";
 
     private static final String DB_PATH = "neo4j-database";
     private static Neo4JConnector instance;
     private static GraphDatabaseService graphDb;
 
     public enum RelTypes implements RelationshipType {
-        IS_PARENT_OF
+        IS_PARENT_OF, IS_SOLD_IN
     }
 
     private Neo4JConnector() {
@@ -86,8 +90,25 @@ public class Neo4JConnector {
         return NODE_PROPERTY_PRICE;
     }
 
+    public String getNodePropertyType() {
+        return NODE_PROPERTY_TYPE;
+    }
+
+    public String getNodeTypeProductgroup() {
+        return NODE_TYPE_PRODUCTGROUP;
+    }
+
+    public String getNodeTypeProduct() {
+        return NODE_TYPE_PRODUCT;
+    }
+
+    public String getNodeTypeProductvariant() {
+        return NODE_TYPE_PRODUCTVARIANT;
+    }
+
     public int getNextIndex() {
         int ret = -1;
+        String resultString;
         String varName = "n";
         String cypherStatement = "MATCH (" + varName + ":ProductCatalog) RETURN max(" + varName + ".index)";
         try (Transaction tx = graphDb.beginTx();
@@ -100,12 +121,13 @@ public class Neo4JConnector {
                     }
                 }
             }
-            if (ret > -1) {
-                ret++;
-            } else {
-                logger.error("Next Index was not found. Index: " + ret + " Result as String: " + result.resultAsString());
-            }
+            resultString = result.resultAsString();
             tx.success();
+        }
+        if (ret > -1) {
+            ret++;
+        } else {
+            logger.error("Next Index was not found. Index: " + ret + " Result as String: " + resultString);
         }
         return ret;
     }
