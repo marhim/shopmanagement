@@ -17,8 +17,6 @@ import java.util.Collection;
 public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCatalogueView, View {
     public static final String NAME = "StoreCatalogue";
     public static final String DISPLAY_NAME = "Filialkatalog";
-    private static final String STORE_SELECT_TITLE = "Filialauswahl";
-    private static final String PLEASE_SELECT = "Bitte wählen...";
     private static final String CONTENT_TITLE = "Eigenschaften";
     private static final String CONTENT_NAME = "Name";
     private static final String CONTENT_SHELF_NUMBER = "Regalnummer";
@@ -33,11 +31,8 @@ public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCa
     private TextField contentShelfNumberTextField;
     private TextField contentQuantityTextField;
 
-    private Label leftLabel;
-
     public StoreCatalogueViewImpl() {
         super();
-        storeSelect = new ComboBox();
         contentTitle.setValue(CONTENT_TITLE);
         contentNameLabel = new Label(CONTENT_NAME);
         contentShelfNumberLabel = new Label(CONTENT_SHELF_NUMBER);
@@ -45,7 +40,6 @@ public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCa
         contentNameTextField = new TextField();
         contentShelfNumberTextField = new TextField();
         contentQuantityTextField = new TextField();
-        leftLabel = new Label("Ich bin links");
         init();
     }
 
@@ -54,26 +48,13 @@ public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCa
 
         createMainMenuButton();
         createTitle(DISPLAY_NAME);
-        createStoreSelect();
         createSplitPanel();
 
-        leftContentPanel.setContent(leftLabel);
         createContent();
 
         addComponentsToMainLayout();
 
         setCompositionRoot(mainLayout);
-    }
-
-    private void createStoreSelect() {
-        storeSelect.setCaption(STORE_SELECT_TITLE);
-        storeSelect.setInputPrompt(PLEASE_SELECT);
-        headLayout.addComponent(storeSelect);
-        headLayout.setComponentAlignment(storeSelect, Alignment.TOP_RIGHT);
-    }
-
-    public void fillStoreSelect(Collection<String> storeStrings) {
-        storeSelect.addItems(storeStrings);
     }
 
     private void createContent() {
@@ -84,6 +65,58 @@ public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCa
         rightBodyLayout.addComponent(contentShelfNumberTextField, 1, 2);
         rightBodyLayout.addComponent(contentQuantityLabel, 0, 3);
         rightBodyLayout.addComponent(contentQuantityTextField, 1, 3);
+    }
+
+    @Override
+    public void setStoreComboBox(ComboBox storeSelect) {
+        this.storeSelect = storeSelect;
+        headLayout.addComponent(this.storeSelect);
+        headLayout.setComponentAlignment(this.storeSelect, Alignment.TOP_RIGHT);
+    }
+
+    @Override
+    public void hideQuantity() {
+        setQuantityVisibility(false);
+    }
+
+    @Override
+    public void showQuantity() {
+        setQuantityVisibility(true);
+    }
+
+    private void setQuantityVisibility(boolean visibility) {
+        contentQuantityLabel.setVisible(visibility);
+        contentQuantityTextField.setVisible(visibility);
+    }
+
+    @Override
+    public void setContentNameTextFieldValue(String nameTextFieldValue) {
+        contentNameTextField.setValue(nameTextFieldValue);
+    }
+
+    @Override
+    public String getContentNameTextFieldValue() {
+        return contentNameTextField.getValue();
+    }
+
+    @Override
+    public void setContentShelfNumberTextFieldValue(String shelfNumberTextFieldValue) {
+        contentShelfNumberTextField.setValue(shelfNumberTextFieldValue);
+    }
+
+    @Override
+    public String getContentShelfNumberTextFieldValue() {
+        return contentShelfNumberTextField.getValue();
+    }
+
+    @Override
+    public void setContentQuantityTextFieldValue(String quantityTextFieldValue) {
+        contentQuantityTextField.setValue(quantityTextFieldValue);
+    }
+
+    @Override
+    public String getContentQuantityTextFieldValue() {
+        return contentQuantityTextField.getValue();
     }
 
     @Override

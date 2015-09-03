@@ -1,5 +1,8 @@
 package de.david.shopmanagement.presenter;
 
+import com.vaadin.data.Property;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Tree;
 import de.david.shopmanagement.database.Neo4JConnector;
 import de.david.shopmanagement.interfaces.StoreCatalogueModel;
 import de.david.shopmanagement.interfaces.StoreCataloguePresenter;
@@ -18,27 +21,31 @@ public class StoreCataloguePresenterImpl implements StoreCataloguePresenter {
     private StoreCatalogueModel storeCatalogueModel;
     private StoreCatalogueView storeCatalogueView;
     private GraphDatabaseService graphDb;
+    private Neo4JConnector neo4JConnector;
+    private ComboBox storeSelect;
+    private Node currentNode;
 
     public void init() {
+        neo4JConnector = Neo4JConnector.getInstance();
+        graphDb = neo4JConnector.getDatabaseService();
         createStoreSelect();
+        storeSelect.addValueChangeListener(valueChangeEvent -> {
+            currentNode = (Node) storeSelect.getValue();
+            storeItemClick(currentNode);
+        });
+
+        storeCatalogueView.setTreePanelVisibility(false);
+        storeCatalogueView.setContentVisibility(false);
     }
 
     private void createStoreSelect() {
-        Collection<String> storeNames = new ArrayList<>();
-        Label store = Neo4JConnector.getInstance().getLabelStore();
-        graphDb = Neo4JConnector.getInstance().getDatabaseService();
+        storeCatalogueModel.createStoreSelect();
+        storeSelect = storeCatalogueModel.getStoreSelect();
+        storeCatalogueView.setStoreComboBox(storeSelect);
+    }
 
-        try (Transaction tx = graphDb.beginTx()) {
-            ResourceIterator<Node> allNodes = graphDb.findNodes(store);
-            while (allNodes.hasNext()) {
-                String storeName = (String) allNodes.next().getProperty(PROPERTY_NAME);
-                storeNames.add(storeName);
-            }
-
-            tx.success();
-        }
-
-        storeCatalogueView.fillStoreSelect(storeNames);
+    private void storeItemClick(Node storeNode) {
+        storeCatalogueView.setTreePanelVisibility(true);
     }
 
     @Override

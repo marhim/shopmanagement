@@ -1,18 +1,24 @@
 package de.david.shopmanagement.interfaces;
 
-import java.util.List;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Tree;
+import org.neo4j.graphdb.Node;
 
 /**
  * @author Marvin
  */
 public interface StoreCatalogueModel {
 
-    List getTreeList();
+    void createStoreSelect();
 
-    void setTreeList(List treeList);
+    void createTreeFromStore(Node storeNode);
 
-    List getStoreList();
+    ComboBox getStoreSelect();
 
-    void setStoreList(List storeList);
+    void setStoreSelect(ComboBox storeSelect);
+
+    Tree getStoreTreeNodes();
+
+    void setStoreTreeNodes(Tree storeTreeNodes);
 
 }
