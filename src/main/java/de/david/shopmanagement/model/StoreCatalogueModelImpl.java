@@ -5,15 +5,19 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Tree;
 import de.david.shopmanagement.database.Neo4JConnector;
 import de.david.shopmanagement.interfaces.StoreCatalogueModel;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.*;
+import org.neo4j.helpers.collection.IteratorUtil;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * @author Marvin
  */
 public class StoreCatalogueModelImpl implements StoreCatalogueModel {
+    private static final Logger logger = LogManager.getLogger();
     private static final String CONTAINER_PROPERTY = "name";
     private static final String STORE_SELECT_TITLE = "Filialauswahl";
     private static final String PLEASE_SELECT = "Bitte wählen...";
@@ -21,7 +25,7 @@ public class StoreCatalogueModelImpl implements StoreCatalogueModel {
     private GraphDatabaseService graphDb;
     private Neo4JConnector neo4JConnector;
     private ComboBox storeSelect;
-    private Tree storeTreeNodes;
+    private Tree storeProductTree;
 
     public StoreCatalogueModelImpl() {
         neo4JConnector = Neo4JConnector.getInstance();
@@ -47,15 +51,74 @@ public class StoreCatalogueModelImpl implements StoreCatalogueModel {
         }
     }
 
-    @Override
-    public void createTreeFromStore(Node storeNode) {
-
-    }
-
     @SuppressWarnings("unchecked")
     private void addNodeToStoreSelect(Node node) {
         Item item = storeSelect.addItem(node);
         // item is null if node is already in storeSelect
+        if (item != null) {
+            String captionName = (String) node.getProperty(neo4JConnector.getNodePropertyName());
+            item.getItemProperty(CONTAINER_PROPERTY).setValue(captionName);
+        }
+    }
+
+    @Override
+    public void createTreeFromStoreNode(Node storeNode) {
+        storeProductTree = new Tree();
+        storeProductTree.addContainerProperty(CONTAINER_PROPERTY, String.class, null);
+        storeProductTree.setItemCaptionPropertyId(CONTAINER_PROPERTY);
+        int storeIndex = -1;
+
+        try (Transaction tx = graphDb.beginTx()) {
+            storeIndex = (int) storeNode.getProperty(neo4JConnector.getNodePropertyIndex());
+
+            tx.success();
+        }
+        String pcLabelString = neo4JConnector.getLabelProductcatalog().toString();
+        String storeLabelString = neo4JConnector.getLabelStore().toString();
+        String productVariant = neo4JConnector.getNodeTypeProductvariant();
+        String nodePropertyIndex = neo4JConnector.getNodePropertyIndex();
+        String nodePropertyType = neo4JConnector.getNodePropertyType();
+        String cypher = "MATCH (n:" + pcLabelString + ")-[r:" + Neo4JConnector.RelTypes.IS_SOLD_IN + "]->(m:" + storeLabelString
+                + ") WHERE m." + nodePropertyIndex + "=" + storeIndex + " AND n." + nodePropertyType + "='" + productVariant + "' RETURN n";
+
+        try (Transaction tx = graphDb.beginTx();
+            Result result = graphDb.execute(cypher)) {
+            Iterator<Node> n_column = result.columnAs("n");
+            for (Node childNode : IteratorUtil.asIterable(n_column)) {
+                addAllParentsToTreeRek(childNode, true);
+            }
+
+            tx.success();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void addAllParentsToTreeRek(Node childNode, boolean isVeryChild) {
+        if (childNode != null) {
+            addNodeToStoreProductTree(childNode);
+            if (isVeryChild) {
+                storeProductTree.setChildrenAllowed(childNode, false);
+            }
+            ArrayList<Node> parents = new ArrayList<>();
+            for (Relationship r : childNode.getRelationships(Neo4JConnector.RelTypes.IS_PARENT_OF, Direction.INCOMING)) {
+                parents.add(r.getStartNode());
+            }
+            if (parents.size() > 0) {
+                for (Node parent : parents) {
+                    if ((int) parent.getProperty(neo4JConnector.getNodePropertyIndex()) > 0) {
+                        addAllParentsToTreeRek(parent, false);
+                        storeProductTree.setParent(childNode, parent);
+                    }
+                }
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void addNodeToStoreProductTree(Node node) {
+        Item item = storeProductTree.addItem(node);
+        // item is null if node is already in container
         if (item != null) {
             String captionName = (String) node.getProperty(neo4JConnector.getNodePropertyName());
             item.getItemProperty(CONTAINER_PROPERTY).setValue(captionName);
@@ -73,12 +136,12 @@ public class StoreCatalogueModelImpl implements StoreCatalogueModel {
     }
 
     @Override
-    public Tree getStoreTreeNodes() {
-        return storeTreeNodes;
+    public Tree getStoreProductTree() {
+        return storeProductTree;
     }
 
     @Override
-    public void setStoreTreeNodes(Tree storeTreeNodes) {
-        this.storeTreeNodes = storeTreeNodes;
+    public void setStoreProductTree(Tree storeTreeNodes) {
+        this.storeProductTree = storeTreeNodes;
     }
 }

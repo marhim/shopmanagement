@@ -2,10 +2,7 @@ package de.david.shopmanagement.views;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.*;
 import de.david.shopmanagement.interfaces.StoreCataloguePresenter;
 import de.david.shopmanagement.interfaces.StoreCatalogueView;
 
@@ -24,6 +21,7 @@ public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCa
 
     private StoreCataloguePresenter storeCataloguePresenter;
     private ComboBox storeSelect;
+    private Tree storeProductTree;
     private Label contentNameLabel;
     private Label contentShelfNumberLabel;
     private Label contentQuantityLabel;
@@ -38,6 +36,7 @@ public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCa
         contentShelfNumberLabel = new Label(CONTENT_SHELF_NUMBER);
         contentQuantityLabel = new Label(CONTENT_QUANTITY);
         contentNameTextField = new TextField();
+        contentNameTextField.setEnabled(false);
         contentShelfNumberTextField = new TextField();
         contentQuantityTextField = new TextField();
         init();
@@ -72,6 +71,17 @@ public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCa
         this.storeSelect = storeSelect;
         headLayout.addComponent(this.storeSelect);
         headLayout.setComponentAlignment(this.storeSelect, Alignment.TOP_RIGHT);
+    }
+
+    @Override
+    public void setStoreProductTree(Tree storeProductTree) {
+        this.storeProductTree = storeProductTree;
+        leftContentPanel.setContent(this.storeProductTree);
+    }
+
+    @Override
+    public void updateStoreProductTree(Tree storeProductTree) {
+        this.storeProductTree = storeProductTree;
     }
 
     @Override

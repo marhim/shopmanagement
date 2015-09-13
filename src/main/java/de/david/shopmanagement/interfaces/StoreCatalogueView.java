@@ -1,6 +1,7 @@
 package de.david.shopmanagement.interfaces;
 
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Tree;
 
 import java.util.Collection;
 
@@ -13,7 +14,15 @@ public interface StoreCatalogueView {
 
     void setTreePanelVisibility(boolean visibility);
 
+    boolean isTreePanelVisible();
+
     void setContentVisibility(boolean visibility);
+
+    boolean isContentVisible();
+
+    void setStoreProductTree(Tree storeProductTree);
+
+    void updateStoreProductTree(Tree storeProductTree);
 
     void hideQuantity();
 

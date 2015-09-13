@@ -21,6 +21,8 @@ public class Neo4JConnector {
     private static final String NODE_PROPERTY_DESCRIPTION = "description";
     private static final String NODE_PROPERTY_PRICE = "price";
     private static final String NODE_PROPERTY_TYPE = "type";
+    private static final String NODE_PROPERTY_SHELF = "shelf";
+    private static final String NODE_PROPERTY_AMOUNT = "amount";
     private static final String NODE_TYPE_PRODUCTGROUP = "productGroup";
     private static final String NODE_TYPE_PRODUCT = "product";
     private static final String NODE_TYPE_PRODUCTVARIANT = "productVariant";
@@ -104,6 +106,14 @@ public class Neo4JConnector {
 
     public String getNodeTypeProductvariant() {
         return NODE_TYPE_PRODUCTVARIANT;
+    }
+
+    public String getNodePropertyAmount() {
+        return NODE_PROPERTY_AMOUNT;
+    }
+
+    public String getNodePropertyShelf() {
+        return NODE_PROPERTY_SHELF;
     }
 
     public int getNextIndex() {

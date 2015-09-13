@@ -11,14 +11,14 @@ public interface StoreCatalogueModel {
 
     void createStoreSelect();
 
-    void createTreeFromStore(Node storeNode);
+    void createTreeFromStoreNode(Node storeNode);
 
     ComboBox getStoreSelect();
 
     void setStoreSelect(ComboBox storeSelect);
 
-    Tree getStoreTreeNodes();
+    Tree getStoreProductTree();
 
-    void setStoreTreeNodes(Tree storeTreeNodes);
+    void setStoreProductTree(Tree storeProductTree);
 
 }

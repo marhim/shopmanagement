@@ -71,6 +71,7 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
         contentPriceTextField.setTextChangeTimeout(TEXT_CHANGE_TIMEOUT);
     }
 
+    @Override
     public void setTree(Tree tree) {
         this.tree = tree;
         leftContentPanel.setContent(this.tree);

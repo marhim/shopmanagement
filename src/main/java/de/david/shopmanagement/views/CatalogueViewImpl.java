@@ -72,7 +72,17 @@ public class CatalogueViewImpl extends CustomComponent implements CatalogueView 
     }
 
     @Override
+    public boolean isContentVisible() {
+        return rightBodyLayout.isVisible();
+    }
+
+    @Override
     public void setTreePanelVisibility(boolean visibility) {
         leftContentPanel.setVisible(visibility);
+    }
+
+    @Override
+    public boolean isTreePanelVisible() {
+        return leftContentPanel.isVisible();
     }
 }
