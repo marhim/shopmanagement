@@ -1,6 +1,7 @@
 package de.david.shopmanagement.presenter;
 
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Tree;
 import de.david.shopmanagement.database.Neo4JConnector;
 import de.david.shopmanagement.interfaces.StoreCatalogueModel;
@@ -66,7 +67,17 @@ public class StoreCataloguePresenterImpl implements StoreCataloguePresenter {
 
     private void storeProductTreeItemClick(Node node) {
         if (currentNode != null) {
-            saveRelationProperties(currentNode);
+            String nodeName = "Node not found";
+            try (Transaction tx = graphDb.beginTx()) {
+                nodeName = (String) currentStore.getProperty(neo4JConnector.getNodePropertyName());
+
+                tx.success();
+            }
+            if (saveRelationProperties(currentNode)) {
+                Notification.show("Eigenschaften von '" + nodeName + "' wurden gespeichert!", Notification.Type.HUMANIZED_MESSAGE);
+            } else {
+                Notification.show("Eigenschaften von '" + nodeName + "' konnten nicht gespeichert werden!", Notification.Type.ERROR_MESSAGE);
+            }
         }
         currentNode = node;
         String contentName = "";
@@ -101,7 +112,8 @@ public class StoreCataloguePresenterImpl implements StoreCataloguePresenter {
         }
     }
 
-    private void saveRelationProperties(Node node) {
+    private boolean saveRelationProperties(Node node) {
+        boolean ret = true;
         String newShelf = storeCatalogueView.getContentShelfNumberTextFieldValue();
         Integer newAmount = -1;
         boolean isProductVariant = false;
@@ -123,7 +135,11 @@ public class StoreCataloguePresenterImpl implements StoreCataloguePresenter {
                 }
             }
             tx.success();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            ret = false;
         }
+        return ret;
     }
 
     @Override

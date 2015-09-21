@@ -36,7 +36,7 @@ public class ProductCatalogueModelImpl implements ProductCatalogueModel {
 
     @Override
     public boolean saveNode(NodeData nodeData) {
-        boolean ret;
+        boolean ret = true;
         Long nodeId = nodeData.getNodeId();
         String nodeName = nodeData.getNodeName();
         String nodeDescription = nodeData.getNodeDescription();
@@ -50,9 +50,9 @@ public class ProductCatalogueModelImpl implements ProductCatalogueModel {
                 node.setProperty(neo4JConnector.getNodePropertyPrice(), nodePrice);
             }
 
-            ret = true;
             tx.success();
         } catch (Exception e) {
+            logger.error(e.getMessage());
             ret = false;
         }
 
@@ -61,13 +61,12 @@ public class ProductCatalogueModelImpl implements ProductCatalogueModel {
 
     @Override
     public boolean saveNodeProperty(Long nodeId, String nodeProperty, Object nodePropertyValue) {
-        boolean ret;
+        boolean ret = true;
 
         try (Transaction tx = graphDb.beginTx()) {
             Node node = graphDb.getNodeById(nodeId);
             node.setProperty(nodeProperty, nodePropertyValue);
 
-            ret = true;
             tx.success();
         } catch (Exception e) {
             ret = false;
@@ -78,7 +77,7 @@ public class ProductCatalogueModelImpl implements ProductCatalogueModel {
 
     @Override
     public boolean deleteNodeWithRelationships(Node node) {
-        boolean ret = false;
+        boolean ret = true;
 
         try (Transaction tx = graphDb.beginTx()) {
             for (Relationship rel : node.getRelationships(Direction.INCOMING)) {
@@ -86,10 +85,10 @@ public class ProductCatalogueModelImpl implements ProductCatalogueModel {
             }
             node.delete();
 
-            ret = true;
             tx.success();
         } catch (TransactionFailureException e) {
             logger.error(e.getMessage());
+            ret = false;
         }
 
         return ret;

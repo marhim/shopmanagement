@@ -3,6 +3,7 @@ package de.david.shopmanagement.presenter;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.event.Action;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Tree;
 import de.david.shopmanagement.database.Neo4JConnector;
 import de.david.shopmanagement.interfaces.ProductCatalogueModel;
@@ -55,34 +56,34 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
     }
 
     private void addTextBlurListeners() {
-        productCatalogueView.getContentNameTextField().addBlurListener(blurEvent -> productCatalogueModel.saveNodeProperty(
+        productCatalogueView.getContentNameTextField().addBlurListener(blurEvent -> saveNodeProperty(
                 currentNode.getId(),
                 neo4JConnector.getNodePropertyName(),
                 productCatalogueView.getContentNameTextFieldValue()));
 
-        productCatalogueView.getContentDescriptionTextArea().addBlurListener(blurEvent -> productCatalogueModel.saveNodeProperty(
+        productCatalogueView.getContentDescriptionTextArea().addBlurListener(blurEvent -> saveNodeProperty(
                 currentNode.getId(),
                 neo4JConnector.getNodePropertyDescription(),
                 productCatalogueView.getContentDescriptionTextAreaValue()));
 
-        productCatalogueView.getContentPriceTextField().addBlurListener(blurEvent -> productCatalogueModel.saveNodeProperty(
+        productCatalogueView.getContentPriceTextField().addBlurListener(blurEvent -> saveNodeProperty(
                 currentNode.getId(),
                 neo4JConnector.getNodePropertyPrice(),
                 productCatalogueView.getContentPriceTextFieldValue()));
     }
 
     private void addTextChangeListeners() {
-        productCatalogueView.getContentNameTextField().addTextChangeListener(textChangeEvent -> productCatalogueModel.saveNodeProperty(
+        productCatalogueView.getContentNameTextField().addTextChangeListener(textChangeEvent -> saveNodeProperty(
                 currentNode.getId(),
                 neo4JConnector.getNodePropertyName(),
                 productCatalogueView.getContentNameTextFieldValue()));
 
-        productCatalogueView.getContentDescriptionTextArea().addTextChangeListener(textChangeEvent -> productCatalogueModel.saveNodeProperty(
+        productCatalogueView.getContentDescriptionTextArea().addTextChangeListener(textChangeEvent -> saveNodeProperty(
                 currentNode.getId(),
                 neo4JConnector.getNodePropertyDescription(),
                 productCatalogueView.getContentDescriptionTextAreaValue()));
 
-        productCatalogueView.getContentPriceTextField().addTextChangeListener(textChangeEvent -> productCatalogueModel.saveNodeProperty(
+        productCatalogueView.getContentPriceTextField().addTextChangeListener(textChangeEvent -> saveNodeProperty(
                 currentNode.getId(),
                 neo4JConnector.getNodePropertyPrice(),
                 productCatalogueView.getContentPriceTextFieldValue()));
@@ -94,7 +95,7 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
             @Override
             public Action[] getActions(Object target, Object sender) {
                 if (target == null) {
-                    return new Action[] { ACTION_ADD_PRODUCT_GROUP };
+                    return new Action[]{ACTION_ADD_PRODUCT_GROUP};
                 } else if (target instanceof Node) {
                     Node tmp = (Node) target;
                     String nodeType = null;
@@ -125,11 +126,11 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
                             ret[i] = actionList.get(i);
                         }
                     } else {
-                        ret = new Action[] { ACTION_REMOVE_ITEM };
+                        ret = new Action[]{ACTION_REMOVE_ITEM};
                     }
                     return ret;
                 } else {
-                    return new Action[] { ACTION_REMOVE_ITEM };
+                    return new Action[]{ACTION_REMOVE_ITEM};
                 }
             }
 
@@ -217,7 +218,17 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
     public void treeItemClick(Node node) {
         if (node != null) {
             if (currentNode != null) {
-                saveNode(currentNode);
+                String nodeName = "Node not found";
+                try (Transaction tx = graphDb.beginTx()) {
+                    nodeName = (String) currentNode.getProperty(neo4JConnector.getNodePropertyName());
+
+                    tx.success();
+                }
+                if (saveNode(currentNode)) {
+                    Notification.show("'" + nodeName + "' wurde gespeichert!", Notification.Type.HUMANIZED_MESSAGE);
+                } else {
+                    Notification.show("'" + nodeName + "' konnte nicht gespeichert werden!", Notification.Type.ERROR_MESSAGE);
+                }
             }
             currentNode = node;
             String contentName = "";
@@ -251,18 +262,18 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
     }
 
     private boolean saveNode(Node node) {
-        boolean ret = false;
+        boolean ret = true;
         NodeData nodeData = new NodeData();
         try (Transaction tx = graphDb.beginTx()) {
             long nodeIdLong = node.getId();
             nodeData.setNodeId(nodeIdLong);
 
-            ret = true;
             tx.success();
         } catch (EntityNotFoundException e) {
             logger.error(e.getMessage());
+            ret = false;
         }
-        if (ret) {
+        if (!ret) {
             nodeData.setNodeName(productCatalogueView.getContentNameTextFieldValue());
             nodeData.setNodeDescription(productCatalogueView.getContentDescriptionTextAreaValue());
             try (Transaction tx = graphDb.beginTx()) {
@@ -283,6 +294,17 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
             ret = productCatalogueModel.saveNode(nodeData);
         }
 
+        return ret;
+    }
+
+    private boolean saveNodeProperty(Long nodeId, String nodeProperty, Object nodePropertyValue) {
+        boolean ret = true;
+        if (productCatalogueModel.saveNodeProperty(nodeId, nodeProperty, nodePropertyValue)) {
+            Notification.show("Eigenschaft wurde gespeichert!", Notification.Type.HUMANIZED_MESSAGE);
+        } else {
+            Notification.show("Eigenschaft konnte nicht gespeichert werden!", Notification.Type.ERROR_MESSAGE);
+            ret = false;
+        }
         return ret;
     }
 }
