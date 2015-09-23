@@ -6,6 +6,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
 import de.david.shopmanagement.interfaces.ProductCataloguePresenter;
 import de.david.shopmanagement.interfaces.ProductCatalogueView;
+import de.david.shopmanagement.util.Utility;
 import org.neo4j.graphdb.Node;
 
 import java.util.ArrayList;
@@ -21,7 +22,6 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
     private static final String CONTENT_NAME = "Name";
     private static final String CONTENT_DESCRIPTION = "Beschreibung";
     private static final String CONTENT_PRICE = "Preis";
-    private static final int TEXT_CHANGE_TIMEOUT = 5000;
 
     private List<ProductCatalogueViewListener> listeners = new ArrayList<>();
     private ProductCataloguePresenter productCataloguePresenter;
@@ -62,13 +62,13 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
 
     private void config() {
         contentNameTextField.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.TIMEOUT);
-        contentNameTextField.setTextChangeTimeout(TEXT_CHANGE_TIMEOUT);
+        contentNameTextField.setTextChangeTimeout(Utility.getInstance().getTextChangeTimeout());
 
         contentDescriptionTextArea.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.TIMEOUT);
-        contentDescriptionTextArea.setTextChangeTimeout(TEXT_CHANGE_TIMEOUT);
+        contentDescriptionTextArea.setTextChangeTimeout(Utility.getInstance().getTextChangeTimeout());
 
         contentPriceTextField.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.TIMEOUT);
-        contentPriceTextField.setTextChangeTimeout(TEXT_CHANGE_TIMEOUT);
+        contentPriceTextField.setTextChangeTimeout(Utility.getInstance().getTextChangeTimeout());
     }
 
     @Override

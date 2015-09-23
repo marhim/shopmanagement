@@ -5,6 +5,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
 import de.david.shopmanagement.interfaces.StoreCataloguePresenter;
 import de.david.shopmanagement.interfaces.StoreCatalogueView;
+import de.david.shopmanagement.util.Utility;
 
 import java.util.Collection;
 
@@ -40,6 +41,7 @@ public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCa
         contentShelfNumberTextField = new TextField();
         contentQuantityTextField = new TextField();
         init();
+        config();
     }
 
     private void init() {
@@ -54,6 +56,15 @@ public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCa
         addComponentsToMainLayout();
 
         setCompositionRoot(mainLayout);
+    }
+
+    private void config() {
+        contentShelfNumberTextField.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.TIMEOUT);
+        contentShelfNumberTextField.setTextChangeTimeout(Utility.getInstance().getTextChangeTimeout());
+
+        contentQuantityTextField.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.TIMEOUT);
+        contentQuantityTextField.setTextChangeTimeout(Utility.getInstance().getTextChangeTimeout());
+
     }
 
     private void createContent() {
@@ -110,6 +121,16 @@ public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCa
     }
 
     @Override
+    public void setContentShelfNumberTextField(TextField shelfNumberTextField) {
+        contentShelfNumberTextField = shelfNumberTextField;
+    }
+
+    @Override
+    public TextField getContentShelfNumberTextField() {
+        return contentShelfNumberTextField;
+    }
+
+    @Override
     public void setContentShelfNumberTextFieldValue(String shelfNumberTextFieldValue) {
         contentShelfNumberTextField.setValue(shelfNumberTextFieldValue);
     }
@@ -117,6 +138,16 @@ public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCa
     @Override
     public String getContentShelfNumberTextFieldValue() {
         return contentShelfNumberTextField.getValue();
+    }
+
+    @Override
+    public void setContentQuantityTextField(TextField quantityTextField) {
+        contentQuantityTextField = quantityTextField;
+    }
+
+    @Override
+    public TextField getContentQuantityTextField() {
+        return contentQuantityTextField;
     }
 
     @Override

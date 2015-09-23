@@ -28,11 +28,16 @@ public class Neo4JConnector {
     private static final String NODE_TYPE_PRODUCTVARIANT = "productVariant";
 
     private static final String DB_PATH = "neo4j-database";
-    private static Neo4JConnector instance;
     private static GraphDatabaseService graphDb;
 
     public enum RelTypes implements RelationshipType {
         IS_PARENT_OF, IS_SOLD_IN
+    }
+
+    // Innere private Klasse, die erst beim Zugriff durch die umgebende Klasse initialisiert wird
+    private static final class Neo4JInstanceHolder {
+        // Initialisierung geschieht nur einmal und wird vom ClassLoader implizit synchronisiert
+        static final Neo4JConnector INSTANCE = new Neo4JConnector();
     }
 
     private Neo4JConnector() {
@@ -41,10 +46,7 @@ public class Neo4JConnector {
     }
 
     public static Neo4JConnector getInstance() {
-        if (Neo4JConnector.instance == null) {
-            Neo4JConnector.instance = new Neo4JConnector();
-        }
-        return Neo4JConnector.instance;
+        return Neo4JInstanceHolder.INSTANCE;
     }
 
     public boolean hasChildren(Node node) {

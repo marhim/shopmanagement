@@ -9,6 +9,8 @@ import org.neo4j.graphdb.Node;
  */
 public interface StoreCatalogueModel {
 
+    boolean saveRelationProperties(Node currentStore, Node node, String newShelf, Integer newAmount);
+
     void createStoreSelect();
 
     void createTreeFromStoreNode(Node storeNode);

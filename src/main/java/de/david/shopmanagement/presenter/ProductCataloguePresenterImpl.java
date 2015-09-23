@@ -10,6 +10,7 @@ import de.david.shopmanagement.interfaces.ProductCatalogueModel;
 import de.david.shopmanagement.interfaces.ProductCataloguePresenter;
 import de.david.shopmanagement.interfaces.ProductCatalogueView;
 import de.david.shopmanagement.util.NodeData;
+import de.david.shopmanagement.util.Utility;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.neo4j.cypher.EntityNotFoundException;
@@ -24,8 +25,6 @@ import java.util.ArrayList;
  */
 public class ProductCataloguePresenterImpl implements ProductCataloguePresenter, ProductCatalogueView.ProductCatalogueViewListener {
     private static final Logger logger = LogManager.getLogger(ProductCataloguePresenterImpl.class);
-    private static final String DEFAULT_NEW_NODE_NAME = "New Node";
-    private static final String DEFAULT_NEW_NODE_DESCRIPTION = "";
     private static final Double DEFAULT_NEW_NODE_PRICE = 0.0d;
     private static final Action ACTION_ADD_PRODUCT = new Action("Produkt hinzufügen");
     private static final Action ACTION_ADD_PRODUCT_GROUP = new Action("Produktgruppe hinzufügen");
@@ -157,10 +156,10 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
         try (Transaction tx = graphDb.beginTx()) {
             Node newNode = graphDb.createNode(neo4JConnector.getLabelProductcatalog());
             newNode.setProperty(neo4JConnector.getNodePropertyIndex(), neo4JConnector.getNextIndex());
-            newNode.setProperty(neo4JConnector.getNodePropertyName(), DEFAULT_NEW_NODE_NAME);
-            productCatalogueView.setContentNameTextFieldValue(DEFAULT_NEW_NODE_NAME);
-            newNode.setProperty(neo4JConnector.getNodePropertyDescription(), DEFAULT_NEW_NODE_DESCRIPTION);
-            productCatalogueView.setContentDescriptionTextAreaValue(DEFAULT_NEW_NODE_DESCRIPTION);
+            newNode.setProperty(neo4JConnector.getNodePropertyName(), Utility.getInstance().getDefaultNewNodeName());
+            productCatalogueView.setContentNameTextFieldValue(Utility.getInstance().getDefaultNewNodeName());
+            newNode.setProperty(neo4JConnector.getNodePropertyDescription(), Utility.getInstance().getEmptyString());
+            productCatalogueView.setContentDescriptionTextAreaValue(Utility.getInstance().getEmptyString());
             newNode.setProperty(neo4JConnector.getNodePropertyPrice(), DEFAULT_NEW_NODE_PRICE);
             newNode.setProperty(neo4JConnector.getNodePropertyType(), nodeType);
 
@@ -218,16 +217,16 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
     public void treeItemClick(Node node) {
         if (node != null) {
             if (currentNode != null) {
-                String nodeName = "Node not found";
+                String nodeName = Utility.getInstance().getNodeNotFound();
                 try (Transaction tx = graphDb.beginTx()) {
                     nodeName = (String) currentNode.getProperty(neo4JConnector.getNodePropertyName());
 
                     tx.success();
                 }
                 if (saveNode(currentNode)) {
-                    Notification.show("'" + nodeName + "' wurde gespeichert!", Notification.Type.HUMANIZED_MESSAGE);
+                    Notification.show(String.format(Utility.getInstance().getNodeSaveSuccess(), nodeName), Notification.Type.HUMANIZED_MESSAGE);
                 } else {
-                    Notification.show("'" + nodeName + "' konnte nicht gespeichert werden!", Notification.Type.ERROR_MESSAGE);
+                    Notification.show(String.format(Utility.getInstance().getNodeSaveFailed(), nodeName), Notification.Type.ERROR_MESSAGE);
                 }
             }
             currentNode = node;
@@ -298,12 +297,11 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
     }
 
     private boolean saveNodeProperty(Long nodeId, String nodeProperty, Object nodePropertyValue) {
-        boolean ret = true;
-        if (productCatalogueModel.saveNodeProperty(nodeId, nodeProperty, nodePropertyValue)) {
-            Notification.show("Eigenschaft wurde gespeichert!", Notification.Type.HUMANIZED_MESSAGE);
+        boolean ret = productCatalogueModel.saveNodeProperty(nodeId, nodeProperty, nodePropertyValue);
+        if (ret) {
+            Notification.show(Utility.getInstance().getPropertySaveSuccess(), Notification.Type.HUMANIZED_MESSAGE);
         } else {
-            Notification.show("Eigenschaft konnte nicht gespeichert werden!", Notification.Type.ERROR_MESSAGE);
-            ret = false;
+            Notification.show(Utility.getInstance().getPropertySaveFailed(), Notification.Type.ERROR_MESSAGE);
         }
         return ret;
     }

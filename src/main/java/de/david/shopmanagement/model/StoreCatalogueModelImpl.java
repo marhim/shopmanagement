@@ -33,6 +33,33 @@ public class StoreCatalogueModelImpl implements StoreCatalogueModel {
     }
 
     @Override
+    public boolean saveRelationProperties(Node currentStore, Node node, String newShelf, Integer newAmount) {
+        boolean ret = true;
+
+        if (!(newShelf == null && newAmount == null)) {
+            try (Transaction tx = graphDb.beginTx()) {
+                for (Relationship r : node.getRelationships(Neo4JConnector.RelTypes.IS_SOLD_IN, Direction.OUTGOING)) {
+                    if (r.getEndNode().getProperty(neo4JConnector.getNodePropertyIndex()).equals(currentStore.getProperty(neo4JConnector.getNodePropertyIndex()))) {
+                        if (newShelf != null) {
+                            r.setProperty(neo4JConnector.getNodePropertyShelf(), newShelf);
+                        }
+                        if (newAmount != null) {
+                            r.setProperty(neo4JConnector.getNodePropertyAmount(), newAmount);
+                        }
+                    }
+                }
+                tx.success();
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+                ret = false;
+            }
+        } else {
+            ret = false;
+        }
+        return ret;
+    }
+
+    @Override
     public void createStoreSelect() {
         storeSelect = new ComboBox();
         storeSelect.setCaption(STORE_SELECT_TITLE);

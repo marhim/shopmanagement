@@ -7,6 +7,7 @@ import de.david.shopmanagement.database.Neo4JConnector;
 import de.david.shopmanagement.interfaces.StoreCatalogueModel;
 import de.david.shopmanagement.interfaces.StoreCataloguePresenter;
 import de.david.shopmanagement.interfaces.StoreCatalogueView;
+import de.david.shopmanagement.util.Utility;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.*;
@@ -39,6 +40,31 @@ public class StoreCataloguePresenterImpl implements StoreCataloguePresenter {
 
         storeCatalogueView.setTreePanelVisibility(false);
         storeCatalogueView.setContentVisibility(false);
+
+        addTextBlurListeners();
+        addTextChangeListeners();
+    }
+
+    private void addTextBlurListeners() {
+        storeCatalogueView.getContentShelfNumberTextField().addBlurListener(blurEvent -> saveRelationProperty(
+                storeCatalogueView.getContentShelfNumberTextFieldValue(),
+                null
+        ));
+        storeCatalogueView.getContentQuantityTextField().addBlurListener(blurEvent -> saveRelationProperty(
+                null,
+                storeCatalogueView.getContentQuantityTextFieldValue()
+        ));
+    }
+
+    private void addTextChangeListeners() {
+        storeCatalogueView.getContentShelfNumberTextField().addTextChangeListener(textChangeEvent -> saveRelationProperty(
+                storeCatalogueView.getContentShelfNumberTextFieldValue(),
+                null
+        ));
+        storeCatalogueView.getContentQuantityTextField().addTextChangeListener(textChangeEvent -> saveRelationProperty(
+                null,
+                storeCatalogueView.getContentQuantityTextFieldValue()
+        ));
     }
 
     private void createStoreSelect() {
@@ -69,14 +95,14 @@ public class StoreCataloguePresenterImpl implements StoreCataloguePresenter {
         if (currentNode != null) {
             String nodeName = "Node not found";
             try (Transaction tx = graphDb.beginTx()) {
-                nodeName = (String) currentStore.getProperty(neo4JConnector.getNodePropertyName());
+                nodeName = (String) currentNode.getProperty(neo4JConnector.getNodePropertyName());
 
                 tx.success();
             }
-            if (saveRelationProperties(currentNode)) {
-                Notification.show("Eigenschaften von '" + nodeName + "' wurden gespeichert!", Notification.Type.HUMANIZED_MESSAGE);
+            if (saveRelationFromNode(currentNode)) {
+                Notification.show(String.format(Utility.getInstance().getNodeSaveSuccess(), nodeName), Notification.Type.HUMANIZED_MESSAGE);
             } else {
-                Notification.show("Eigenschaften von '" + nodeName + "' konnten nicht gespeichert werden!", Notification.Type.ERROR_MESSAGE);
+                Notification.show(String.format(Utility.getInstance().getNodeSaveFailed(), nodeName), Notification.Type.ERROR_MESSAGE);
             }
         }
         currentNode = node;
@@ -112,10 +138,9 @@ public class StoreCataloguePresenterImpl implements StoreCataloguePresenter {
         }
     }
 
-    private boolean saveRelationProperties(Node node) {
-        boolean ret = true;
+    private boolean saveRelationFromNode(Node node) {
         String newShelf = storeCatalogueView.getContentShelfNumberTextFieldValue();
-        Integer newAmount = -1;
+        Integer newAmount;
         boolean isProductVariant = false;
         try (Transaction tx = graphDb.beginTx()) {
             isProductVariant = node.getProperty(neo4JConnector.getNodePropertyType()).toString().equals(neo4JConnector.getNodeTypeProductvariant());
@@ -123,21 +148,23 @@ public class StoreCataloguePresenterImpl implements StoreCataloguePresenter {
         }
         if (isProductVariant) {
             newAmount = Integer.parseInt(storeCatalogueView.getContentQuantityTextFieldValue());
+        } else {
+            newAmount = null;
         }
 
-        try (Transaction tx = graphDb.beginTx()) {
-            for (Relationship r : node.getRelationships(Neo4JConnector.RelTypes.IS_SOLD_IN, Direction.OUTGOING)) {
-                if (r.getEndNode().getProperty(neo4JConnector.getNodePropertyIndex()).equals(currentStore.getProperty(neo4JConnector.getNodePropertyIndex()))) {
-                    r.setProperty(neo4JConnector.getNodePropertyShelf(), newShelf);
-                    if (isProductVariant) {
-                        r.setProperty(neo4JConnector.getNodePropertyAmount(), newAmount);
-                    }
-                }
-            }
-            tx.success();
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            ret = false;
+        return storeCatalogueModel.saveRelationProperties(currentStore, node, newShelf, newAmount);
+    }
+
+    private boolean saveRelationProperty(String newShelf, String newAmount) {
+        Integer newAmountInt = null;
+        if (newAmount != null) {
+            newAmountInt = Integer.parseInt(newAmount);
+        }
+        boolean ret = storeCatalogueModel.saveRelationProperties(currentStore, currentNode, newShelf, newAmountInt);
+        if (ret) {
+            Notification.show(Utility.getInstance().getPropertySaveSuccess(), Notification.Type.HUMANIZED_MESSAGE);
+        } else {
+            Notification.show(Utility.getInstance().getPropertySaveFailed(), Notification.Type.ERROR_MESSAGE);
         }
         return ret;
     }

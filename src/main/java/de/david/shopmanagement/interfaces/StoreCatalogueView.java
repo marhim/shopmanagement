@@ -1,6 +1,7 @@
 package de.david.shopmanagement.interfaces;
 
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.Tree;
 
 import java.util.Collection;
@@ -32,9 +33,17 @@ public interface StoreCatalogueView {
 
     String getContentNameTextFieldValue();
 
+    void setContentShelfNumberTextField(TextField shelfNumberTextField);
+
+    TextField getContentShelfNumberTextField();
+
     void setContentShelfNumberTextFieldValue(String shelfNumberTextFieldValue);
 
     String getContentShelfNumberTextFieldValue();
+
+    void setContentQuantityTextField(TextField quantityTextField);
+
+    TextField getContentQuantityTextField();
 
     void setContentQuantityTextFieldValue(String quantityTextFieldValue);
 
