@@ -8,18 +8,18 @@ import de.david.shopmanagement.database.Neo4JConnector;
 import de.david.shopmanagement.exceptions.MissingRootNodeException;
 import de.david.shopmanagement.interfaces.ProductCatalogueModel;
 import de.david.shopmanagement.util.NodeData;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Marvin
  */
 public class ProductCatalogueModelImpl implements ProductCatalogueModel {
-    private static final Logger logger = LogManager.getLogger(ProductCatalogueModelImpl.class);
+    private static final Logger logger = Logger.getLogger(ProductCatalogueModelImpl.class.getName());
     private static final String CONTAINER_PROPERTY = "name";
     private static final String CAPTION_TREE = "TreeCaption";
     private static final int SEARCH_PROPERTY_VALUE = 0;
@@ -52,7 +52,7 @@ public class ProductCatalogueModelImpl implements ProductCatalogueModel {
 
             tx.success();
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage());
             ret = false;
         }
 
@@ -87,7 +87,7 @@ public class ProductCatalogueModelImpl implements ProductCatalogueModel {
 
             tx.success();
         } catch (TransactionFailureException e) {
-            logger.error(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage());
             ret = false;
         }
 

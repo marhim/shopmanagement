@@ -23,6 +23,7 @@ import de.david.shopmanagement.views.StoreCatalogueViewImpl;
 import javax.servlet.annotation.WebServlet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.LogManager;
 
 /**
  *
@@ -34,6 +35,13 @@ public class MainUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+        System.setProperty("java.util.logging.config.file", "logging.properties");
+        try {
+            LogManager.getLogManager().readConfiguration();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         List<CategoryData> categories = new ArrayList<>();
         CategoryData productCatalogue = new CategoryData();
         productCatalogue.setNavigatorName(ProductCatalogueViewImpl.NAME);

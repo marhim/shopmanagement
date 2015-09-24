@@ -7,6 +7,8 @@ public class Utility {
     private static final String DEFAULT_NEW_NODE_NAME = "New Node";
     private static final String NODE_NOT_FOUND = "Node not found";
     private static final String EMPTY_STRING = "";
+    private static final String NODE_CREATE_SUCCESS = "Neuer Knoten wurde erfolgreich erstellt!";
+    private static final String NODE_CREATE_FAILED = "Neuer Knoten konnte nicht erstellt werden!";
     private static final String NODE_SAVE_SUCCESS = "Eigenschaften von '%s' wurden erfolgreich gespeichert!";
     private static final String NODE_SAVE_FAILED = "Eigenschaften von '%s' konnten nicht gespeichert werden!";
     private static final String PROPERTY_SAVE_SUCCESS = "Eigenschaft wurde erfolgreich gespeichert!";
@@ -43,6 +45,14 @@ public class Utility {
 
     public String getPropertySaveFailed() {
         return PROPERTY_SAVE_FAILED;
+    }
+
+    public String getNodeCreateSuccess() {
+        return NODE_CREATE_SUCCESS;
+    }
+
+    public String getNodeCreateFailed() {
+        return NODE_CREATE_FAILED;
     }
 
     public String getNodeSaveSuccess() {

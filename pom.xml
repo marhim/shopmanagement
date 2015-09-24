@@ -12,7 +12,6 @@
 		<vaadin.version>7.5.0</vaadin.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<neo4j.version>2.2.3</neo4j.version>
-		<log4j.version>2.3</log4j.version>
 		<junit.version>4.12</junit.version>
 		<jetty.plugin.version>9.2.3.v20140905</jetty.plugin.version>
 		<project.source.version>1.8</project.source.version>
@@ -69,21 +68,6 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-web</artifactId>
-			<version>${log4j.version}</version>
 		</dependency>
 		<!--
 		  Needed when using the widgetset optimizer (custom ConnectorBundleLoaderFactory).

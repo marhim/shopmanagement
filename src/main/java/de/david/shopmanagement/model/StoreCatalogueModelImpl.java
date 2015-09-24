@@ -5,19 +5,20 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Tree;
 import de.david.shopmanagement.database.Neo4JConnector;
 import de.david.shopmanagement.interfaces.StoreCatalogueModel;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import de.david.shopmanagement.presenter.StoreCataloguePresenterImpl;
 import org.neo4j.graphdb.*;
 import org.neo4j.helpers.collection.IteratorUtil;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Marvin
  */
 public class StoreCatalogueModelImpl implements StoreCatalogueModel {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = Logger.getLogger(StoreCataloguePresenterImpl.class.getName());
     private static final String CONTAINER_PROPERTY = "name";
     private static final String STORE_SELECT_TITLE = "Filialauswahl";
     private static final String PLEASE_SELECT = "Bitte wählen...";
@@ -50,7 +51,7 @@ public class StoreCatalogueModelImpl implements StoreCatalogueModel {
                 }
                 tx.success();
             } catch (Exception e) {
-                logger.error(e.getMessage());
+                logger.log(Level.SEVERE, e.getMessage());
                 ret = false;
             }
         } else {
@@ -117,7 +118,7 @@ public class StoreCatalogueModelImpl implements StoreCatalogueModel {
 
             tx.success();
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage());
         }
     }
 
@@ -132,12 +133,10 @@ public class StoreCatalogueModelImpl implements StoreCatalogueModel {
                 parents.add(r.getStartNode());
             }
             if (parents.size() > 0) {
-                for (Node parent : parents) {
-                    if ((int) parent.getProperty(neo4JConnector.getNodePropertyIndex()) > 0) {
-                        addAllParentsToTreeRek(parent, false);
-                        storeProductTree.setParent(childNode, parent);
-                    }
-                }
+                parents.stream().filter(parent -> (int) parent.getProperty(neo4JConnector.getNodePropertyIndex()) > 0).forEach(parent -> {
+                    addAllParentsToTreeRek(parent, false);
+                    storeProductTree.setParent(childNode, parent);
+                });
             }
         }
     }
