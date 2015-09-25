@@ -46,10 +46,7 @@ public class MainMenuPresenterImpl implements MainMenuPresenter {
     @Override
     public void initMainMenubuttons() {
         List<CategoryData> categories = this.mainMenuModel.getCategories();
-        int catSize = categories.size();
-        for (int i = 0; i < catSize; i++) {
-            mainMenuView.addButton(categories.get(i));
-        }
+        categories.forEach(mainMenuView::addButton);
     }
 
 }

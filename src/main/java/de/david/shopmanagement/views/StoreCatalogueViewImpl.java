@@ -7,8 +7,6 @@ import de.david.shopmanagement.interfaces.StoreCataloguePresenter;
 import de.david.shopmanagement.interfaces.StoreCatalogueView;
 import de.david.shopmanagement.util.Utility;
 
-import java.util.Collection;
-
 /**
  * @author Marvin
  */

@@ -6,6 +6,7 @@ package de.david.shopmanagement.util;
 public class Utility {
     private static final String DEFAULT_NEW_NODE_NAME = "New Node";
     private static final String NODE_NOT_FOUND = "Node not found";
+    private static final String STORE_INDEX_NOT_FOUND = "Store Index not found";
     private static final String EMPTY_STRING = "";
     private static final String NODE_CREATE_SUCCESS = "Neuer Knoten wurde erfolgreich erstellt!";
     private static final String NODE_CREATE_FAILED = "Neuer Knoten konnte nicht erstellt werden!";
@@ -33,6 +34,10 @@ public class Utility {
 
     public String getNodeNotFound() {
         return NODE_NOT_FOUND;
+    }
+
+    public String getStoreIndexNotFound() {
+        return STORE_INDEX_NOT_FOUND;
     }
 
     public String getEmptyString() {

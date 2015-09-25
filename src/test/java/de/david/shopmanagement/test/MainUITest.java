@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.Assert;
 
 /**
- * Created by marvin.himmelmeier on 31.03.2015.
+ * @author Marvin
  */
 public class MainUITest {
 

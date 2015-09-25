@@ -6,6 +6,7 @@ import com.vaadin.ui.Tree;
 import de.david.shopmanagement.database.Neo4JConnector;
 import de.david.shopmanagement.interfaces.StoreCatalogueModel;
 import de.david.shopmanagement.presenter.StoreCataloguePresenterImpl;
+import de.david.shopmanagement.util.Utility;
 import org.neo4j.graphdb.*;
 import org.neo4j.helpers.collection.IteratorUtil;
 
@@ -94,31 +95,37 @@ public class StoreCatalogueModelImpl implements StoreCatalogueModel {
         storeProductTree = new Tree();
         storeProductTree.addContainerProperty(CONTAINER_PROPERTY, String.class, null);
         storeProductTree.setItemCaptionPropertyId(CONTAINER_PROPERTY);
-        int storeIndex = -1;
+        int storeIndex;
 
         try (Transaction tx = graphDb.beginTx()) {
             storeIndex = (int) storeNode.getProperty(neo4JConnector.getNodePropertyIndex());
 
             tx.success();
-        }
-        String pcLabelString = neo4JConnector.getLabelProductcatalog().toString();
-        String storeLabelString = neo4JConnector.getLabelStore().toString();
-        String productVariant = neo4JConnector.getNodeTypeProductvariant();
-        String nodePropertyIndex = neo4JConnector.getNodePropertyIndex();
-        String nodePropertyType = neo4JConnector.getNodePropertyType();
-        String cypher = "MATCH (n:" + pcLabelString + ")-[r:" + Neo4JConnector.RelTypes.IS_SOLD_IN + "]->(m:" + storeLabelString
-                + ") WHERE m." + nodePropertyIndex + "=" + storeIndex + " AND n." + nodePropertyType + "='" + productVariant + "' RETURN n";
-
-        try (Transaction tx = graphDb.beginTx();
-            Result result = graphDb.execute(cypher)) {
-            Iterator<Node> n_column = result.columnAs("n");
-            for (Node childNode : IteratorUtil.asIterable(n_column)) {
-                addAllParentsToTreeRek(childNode, true);
-            }
-
-            tx.success();
         } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
+            storeIndex = -1;
+        }
+        if (storeIndex > -1) {
+            String pcLabelString = neo4JConnector.getLabelProductcatalog().toString();
+            String storeLabelString = neo4JConnector.getLabelStore().toString();
+            String productVariant = neo4JConnector.getNodeTypeProductvariant();
+            String nodePropertyIndex = neo4JConnector.getNodePropertyIndex();
+            String nodePropertyType = neo4JConnector.getNodePropertyType();
+            String cypher = "MATCH (n:" + pcLabelString + ")-[r:" + Neo4JConnector.RelTypes.IS_SOLD_IN + "]->(m:" + storeLabelString
+                    + ") WHERE m." + nodePropertyIndex + "=" + storeIndex + " AND n." + nodePropertyType + "='" + productVariant + "' RETURN n";
+
+            try (Transaction tx = graphDb.beginTx();
+                 Result result = graphDb.execute(cypher)) {
+                Iterator<Node> n_column = result.columnAs("n");
+                for (Node childNode : IteratorUtil.asIterable(n_column)) {
+                    addAllParentsToTreeRek(childNode, true);
+                }
+
+                tx.success();
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, e.getMessage());
+            }
+        } else {
+            logger.log(Level.SEVERE, Utility.getInstance().getStoreIndexNotFound());
         }
     }
 

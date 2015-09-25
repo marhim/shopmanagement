@@ -13,7 +13,7 @@ public interface ProductCatalogueModel {
 
     boolean saveNodeProperty(Long nodeId, String nodeProperty, Object nodePropertyValue);
 
-    boolean deleteNodeWithRelationships(Node node);
+    void deleteNodeWithRelationships(Node node);
 
     void createTreeNodes();
 

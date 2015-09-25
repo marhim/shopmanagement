@@ -25,7 +25,7 @@ public class MainMenuModelImpl implements MainMenuModel {
     }
 
     @Override
-    public List getCategories() {
+    public List<CategoryData> getCategories() {
         return categories;
     }
 

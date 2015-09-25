@@ -152,8 +152,8 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
         });
     }
 
-    private boolean createNewNode(Node parent, String nodeType) {
-        boolean ret = true;
+    private void createNewNode(Node parent, String nodeType) {
+        boolean isSuccessful = true;
         try (Transaction tx = graphDb.beginTx()) {
             Node newNode = graphDb.createNode(neo4JConnector.getLabelProductcatalog());
             newNode.setProperty(neo4JConnector.getNodePropertyIndex(), neo4JConnector.getNextIndex());
@@ -184,16 +184,14 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
             currentNode = null;
-            ret = false;
+            isSuccessful = false;
         }
 
-        if (ret) {
+        if (isSuccessful) {
             Notification.show(Utility.getInstance().getNodeCreateSuccess(), Notification.Type.HUMANIZED_MESSAGE);
         } else {
             Notification.show(Utility.getInstance().getNodeCreateFailed(), Notification.Type.ERROR_MESSAGE);
         }
-
-        return ret;
     }
 
     private void setTreeNodesView() {
@@ -227,11 +225,14 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
     public void treeItemClick(Node node) {
         if (node != null) {
             if (currentNode != null) {
-                String nodeName = Utility.getInstance().getNodeNotFound();
+                String nodeName;
                 try (Transaction tx = graphDb.beginTx()) {
                     nodeName = (String) currentNode.getProperty(neo4JConnector.getNodePropertyName());
 
                     tx.success();
+                }
+                if (nodeName == null) {
+                    nodeName = Utility.getInstance().getNodeNotFound();
                 }
                 if (saveNode(currentNode)) {
                     Notification.show(String.format(Utility.getInstance().getNodeSaveSuccess(), nodeName), Notification.Type.HUMANIZED_MESSAGE);
@@ -279,7 +280,7 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
 
             tx.success();
         } catch (EntityNotFoundException e) {
-            logger.log(Level.WARNING, e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage());
             ret = false;
         }
         if (!ret) {

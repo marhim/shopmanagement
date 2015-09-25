@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface MainMenuModel {
 
-    List getCategories();
+    List<CategoryData> getCategories();
 
     void addCategory(CategoryData categoryData);
 

@@ -76,7 +76,7 @@ public class ProductCatalogueModelImpl implements ProductCatalogueModel {
     }
 
     @Override
-    public boolean deleteNodeWithRelationships(Node node) {
+    public void deleteNodeWithRelationships(Node node) {
         boolean ret = true;
 
         try (Transaction tx = graphDb.beginTx()) {

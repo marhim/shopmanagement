@@ -94,11 +94,14 @@ public class StoreCataloguePresenterImpl implements StoreCataloguePresenter {
 
     private void storeProductTreeItemClick(Node node) {
         if (currentNode != null) {
-            String nodeName = "Node not found";
+            String nodeName;
             try (Transaction tx = graphDb.beginTx()) {
                 nodeName = (String) currentNode.getProperty(neo4JConnector.getNodePropertyName());
 
                 tx.success();
+            }
+            if (nodeName == null) {
+                nodeName = Utility.getInstance().getNodeNotFound();
             }
             if (saveRelationFromNode(currentNode)) {
                 Notification.show(String.format(Utility.getInstance().getNodeSaveSuccess(), nodeName), Notification.Type.HUMANIZED_MESSAGE);
@@ -142,7 +145,7 @@ public class StoreCataloguePresenterImpl implements StoreCataloguePresenter {
     private boolean saveRelationFromNode(Node node) {
         String newShelf = storeCatalogueView.getContentShelfNumberTextFieldValue();
         Integer newAmount;
-        boolean isProductVariant = false;
+        boolean isProductVariant;
         try (Transaction tx = graphDb.beginTx()) {
             isProductVariant = node.getProperty(neo4JConnector.getNodePropertyType()).toString().equals(neo4JConnector.getNodeTypeProductvariant());
             tx.success();

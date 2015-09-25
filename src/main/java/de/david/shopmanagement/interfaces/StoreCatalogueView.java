@@ -4,8 +4,6 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Tree;
 
-import java.util.Collection;
-
 /**
  * @author Marvin
  */
