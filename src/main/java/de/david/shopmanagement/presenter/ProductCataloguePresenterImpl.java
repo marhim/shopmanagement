@@ -11,20 +11,20 @@ import de.david.shopmanagement.interfaces.ProductCataloguePresenter;
 import de.david.shopmanagement.interfaces.ProductCatalogueView;
 import de.david.shopmanagement.util.NodeData;
 import de.david.shopmanagement.util.Utility;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.cypher.EntityNotFoundException;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Marvin
  */
 public class ProductCataloguePresenterImpl implements ProductCataloguePresenter, ProductCatalogueView.ProductCatalogueViewListener {
-    private static final Logger logger = Logger.getLogger(ProductCataloguePresenterImpl.class.getName());
+    private static final Logger logger = LogManager.getLogger(ProductCataloguePresenterImpl.class);
     private static final Double DEFAULT_NEW_NODE_PRICE = 0.0d;
     private static final Action ACTION_ADD_PRODUCT = new Action("Produkt hinzufügen");
     private static final Action ACTION_ADD_PRODUCT_GROUP = new Action("Produktgruppe hinzufügen");
@@ -182,7 +182,7 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
 
             tx.success();
         } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
+            logger.error(e.getMessage());
             currentNode = null;
             isSuccessful = false;
         }
@@ -254,7 +254,7 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
 
                 tx.success();
             } catch (Exception e) {
-                logger.log(Level.SEVERE, e.getMessage());
+                logger.error(e.getMessage());
             }
 
             productCatalogueView.setContentNameTextFieldValue(contentName);
@@ -280,7 +280,7 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
 
             tx.success();
         } catch (EntityNotFoundException e) {
-            logger.log(Level.SEVERE, e.getMessage());
+            logger.error(e.getMessage());
             ret = false;
         }
         if (!ret) {
@@ -298,7 +298,7 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
                     tx.failure();
                 }
             } catch (Exception e) {
-                logger.log(Level.SEVERE, e.getMessage());
+                logger.error(e.getMessage());
             }
 
             ret = productCatalogueModel.saveNode(nodeData);

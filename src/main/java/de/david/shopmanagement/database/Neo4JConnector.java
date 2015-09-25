@@ -1,17 +1,17 @@
 package de.david.shopmanagement.database;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Marvin
  */
 public class Neo4JConnector {
-    private static final Logger logger = Logger.getLogger(Neo4JConnector.class.getName());
+    private static final Logger logger = LogManager.getLogger(Neo4JConnector.class);
     private static final Label LABEL_PRODUCTCATALOG = DynamicLabel.label("ProductCatalog");
     private static final Label LABEL_STORE = DynamicLabel.label("Store");
     private static final String NODE_PROPERTY_NAME = "name";
@@ -137,7 +137,7 @@ public class Neo4JConnector {
         if (ret > -1) {
             ret++;
         } else {
-            logger.log(Level.SEVERE, "Next Index was not found. Index: " + ret + " Result as String: " + resultString);
+            logger.error("Next Index was not found. Index: " + ret + " Result as String: " + resultString);
         }
         return ret;
     }

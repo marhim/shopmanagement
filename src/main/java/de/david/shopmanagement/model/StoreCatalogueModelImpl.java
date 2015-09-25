@@ -7,19 +7,19 @@ import de.david.shopmanagement.database.Neo4JConnector;
 import de.david.shopmanagement.interfaces.StoreCatalogueModel;
 import de.david.shopmanagement.presenter.StoreCataloguePresenterImpl;
 import de.david.shopmanagement.util.Utility;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.*;
 import org.neo4j.helpers.collection.IteratorUtil;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Marvin
  */
 public class StoreCatalogueModelImpl implements StoreCatalogueModel {
-    private static final Logger logger = Logger.getLogger(StoreCataloguePresenterImpl.class.getName());
+    private static final Logger logger = LogManager.getLogger(StoreCataloguePresenterImpl.class);
     private static final String CONTAINER_PROPERTY = "name";
     private static final String STORE_SELECT_TITLE = "Filialauswahl";
     private static final String PLEASE_SELECT = "Bitte wählen...";
@@ -52,7 +52,7 @@ public class StoreCatalogueModelImpl implements StoreCatalogueModel {
                 }
                 tx.success();
             } catch (Exception e) {
-                logger.log(Level.SEVERE, e.getMessage());
+                logger.error(e.getMessage());
                 ret = false;
             }
         } else {
@@ -122,10 +122,10 @@ public class StoreCatalogueModelImpl implements StoreCatalogueModel {
 
                 tx.success();
             } catch (Exception e) {
-                logger.log(Level.SEVERE, e.getMessage());
+                logger.error(e.getMessage());
             }
         } else {
-            logger.log(Level.SEVERE, Utility.getInstance().getStoreIndexNotFound());
+            logger.error(Utility.getInstance().getStoreIndexNotFound());
         }
     }
 

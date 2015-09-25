@@ -8,18 +8,18 @@ import de.david.shopmanagement.database.Neo4JConnector;
 import de.david.shopmanagement.exceptions.MissingRootNodeException;
 import de.david.shopmanagement.interfaces.ProductCatalogueModel;
 import de.david.shopmanagement.util.NodeData;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Marvin
  */
 public class ProductCatalogueModelImpl implements ProductCatalogueModel {
-    private static final Logger logger = Logger.getLogger(ProductCatalogueModelImpl.class.getName());
+    private static final Logger logger = LogManager.getLogger(ProductCatalogueModelImpl.class.getName());
     private static final String CONTAINER_PROPERTY = "name";
     private static final String CAPTION_TREE = "TreeCaption";
     private static final int SEARCH_PROPERTY_VALUE = 0;
@@ -52,7 +52,7 @@ public class ProductCatalogueModelImpl implements ProductCatalogueModel {
 
             tx.success();
         } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
+            logger.error(e.getMessage());
             ret = false;
         }
 
@@ -77,8 +77,6 @@ public class ProductCatalogueModelImpl implements ProductCatalogueModel {
 
     @Override
     public void deleteNodeWithRelationships(Node node) {
-        boolean ret = true;
-
         try (Transaction tx = graphDb.beginTx()) {
             for (Relationship rel : node.getRelationships(Direction.INCOMING)) {
                 rel.delete();
@@ -87,11 +85,8 @@ public class ProductCatalogueModelImpl implements ProductCatalogueModel {
 
             tx.success();
         } catch (TransactionFailureException e) {
-            logger.log(Level.SEVERE, e.getMessage());
-            ret = false;
+            logger.error(e.getMessage());
         }
-
-        return ret;
     }
 
     @Override

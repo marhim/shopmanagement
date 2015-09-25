@@ -8,16 +8,15 @@ import de.david.shopmanagement.interfaces.StoreCatalogueModel;
 import de.david.shopmanagement.interfaces.StoreCataloguePresenter;
 import de.david.shopmanagement.interfaces.StoreCatalogueView;
 import de.david.shopmanagement.util.Utility;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.*;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Marvin
  */
 public class StoreCataloguePresenterImpl implements StoreCataloguePresenter {
-    private static final Logger logger = Logger.getLogger(StoreCataloguePresenterImpl.class.getName());
+    private static final Logger logger = LogManager.getLogger(StoreCataloguePresenterImpl.class);
 
     private StoreCatalogueModel storeCatalogueModel;
     private StoreCatalogueView storeCatalogueView;
@@ -126,7 +125,7 @@ public class StoreCataloguePresenterImpl implements StoreCataloguePresenter {
 
             tx.success();
         } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
+            logger.error(e.getMessage());
         }
 
         storeCatalogueView.setContentNameTextFieldValue(contentName);
