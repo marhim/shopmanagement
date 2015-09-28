@@ -9,11 +9,10 @@
 	<name>shopmanagement</name>
 
 	<properties>
-		<vaadin.version>7.5.0</vaadin.version>
+		<vaadin.version>7.5.6</vaadin.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
-		<neo4j.version>2.2.3</neo4j.version>
+		<neo4j.version>2.2.5</neo4j.version>
 		<log4j2.version>2.4</log4j2.version>
-		<slf4j.version>1.7.12</slf4j.version>
 		<junit.version>4.12</junit.version>
 		<jetty.plugin.version>9.2.3.v20140905</jetty.plugin.version>
 		<project.source.version>1.8</project.source.version>
