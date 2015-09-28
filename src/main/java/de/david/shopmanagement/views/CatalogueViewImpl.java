@@ -1,5 +1,6 @@
 package de.david.shopmanagement.views;
 
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import de.david.shopmanagement.interfaces.CatalogueView;
 
@@ -7,6 +8,8 @@ import de.david.shopmanagement.interfaces.CatalogueView;
  *
  */
 public class CatalogueViewImpl extends CustomComponent implements CatalogueView {
+    private static final String CAT_MAIN_MENU_BUTTON_STYLE = "catalog-main-menu-button";
+
     protected VerticalLayout mainLayout;
     protected HorizontalLayout headLayout;
     protected GridLayout rightBodyLayout;
@@ -39,7 +42,9 @@ public class CatalogueViewImpl extends CustomComponent implements CatalogueView 
 
     protected void createMainMenuButton() {
         mainMenuButton = new Button();
-        mainMenuButton.setCaption(MainMenuViewImpl.MAIN_MENU_DISPLAY_NAME);
+        mainMenuButton.setIcon(FontAwesome.BARS);
+        mainMenuButton.addStyleName(CAT_MAIN_MENU_BUTTON_STYLE);
+        mainMenuButton.setDescription(MainMenuViewImpl.MAIN_MENU_DISPLAY_NAME);
         mainMenuButton.addClickListener(clickEvent -> getUI().getNavigator().navigateTo(MainMenuViewImpl.NAME));
         headLayout.addComponent(mainMenuButton);
         headLayout.setComponentAlignment(mainMenuButton, Alignment.MIDDLE_LEFT);

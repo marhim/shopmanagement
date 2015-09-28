@@ -32,5 +32,15 @@
 @mixin maintheme {
   @include valo;
 
-  // Insert your own theme rules here
+  .main-menu-button.v-button {
+    height: 150px;
+    width: 150px;
+    font-size: 100px;
+  }
+
+  .catalog-main-menu-button.v-button {
+    height: 50px;
+    width: 50px;
+  }
+
 }

@@ -13,6 +13,8 @@ import de.david.shopmanagement.util.CategoryData;
 public class MainMenuViewImpl extends CustomComponent implements MainMenuView, View {
     public static final String NAME = "MainMenu";
     public static final String MAIN_MENU_DISPLAY_NAME = "Hauptmenü";
+    private static final String MAIN_MENU_BUTTON_STYLE = "main-menu-button";
+
     private MainMenuPresenter mainMenuPresenter;
     private Layout buttonLayout;
     private VerticalLayout mainLayout;
@@ -37,7 +39,9 @@ public class MainMenuViewImpl extends CustomComponent implements MainMenuView, V
     @Override
     public void addButton(CategoryData buttonData) {
         Button tmpButton = new Button();
-        tmpButton.setCaption(buttonData.getDisplayName());
+        tmpButton.addStyleName(MAIN_MENU_BUTTON_STYLE);
+        tmpButton.setDescription(buttonData.getDisplayName());
+        tmpButton.setIcon(buttonData.getIcon());
         tmpButton.addClickListener(clickEvent -> getUI().getNavigator().navigateTo(buttonData.getNavigatorName()));
         this.buttonLayout.addComponent(tmpButton);
     }

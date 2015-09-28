@@ -5,6 +5,7 @@ import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
@@ -38,10 +39,12 @@ public class MainUI extends UI {
         CategoryData productCatalogue = new CategoryData();
         productCatalogue.setNavigatorName(ProductCatalogueViewImpl.NAME);
         productCatalogue.setDisplayName(ProductCatalogueViewImpl.DISPLAY_NAME);
+        productCatalogue.setIcon(FontAwesome.BRIEFCASE);
         categories.add(productCatalogue);
         CategoryData storeCatalogue = new CategoryData();
         storeCatalogue.setNavigatorName(StoreCatalogueViewImpl.NAME);
         storeCatalogue.setDisplayName(StoreCatalogueViewImpl.DISPLAY_NAME);
+        storeCatalogue.setIcon(FontAwesome.BUILDING);
         categories.add(storeCatalogue);
 
         MainMenuModel mainMenuModel = new MainMenuModelImpl();
