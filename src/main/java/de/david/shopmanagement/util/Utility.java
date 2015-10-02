@@ -4,6 +4,8 @@ package de.david.shopmanagement.util;
  * @author Marvin
  */
 public class Utility {
+    private static final String PANEL_LABEL_PRODUCT_TREE = "Produktbaum";
+    private static final String PANEL_LABEL_PROPERTIES = "Eigenschaften";
     private static final String DEFAULT_NEW_NODE_NAME = "New Node";
     private static final String NODE_NOT_FOUND = "Node not found";
     private static final String STORE_INDEX_NOT_FOUND = "Store Index not found";
@@ -26,6 +28,14 @@ public class Utility {
 
     public static Utility getInstance() {
         return UtilityInstanceHolder.INSTANCE;
+    }
+
+    public String getPanelLabelProductTree() {
+        return PANEL_LABEL_PRODUCT_TREE;
+    }
+
+    public String getPanelLabelProperties() {
+        return PANEL_LABEL_PROPERTIES;
     }
 
     public String getDefaultNewNodeName() {

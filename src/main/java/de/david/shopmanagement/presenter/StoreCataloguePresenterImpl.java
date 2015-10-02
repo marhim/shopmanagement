@@ -92,70 +92,39 @@ public class StoreCataloguePresenterImpl implements StoreCataloguePresenter {
     }
 
     private void storeProductTreeItemClick(Node node) {
-        if (currentNode != null) {
-            String nodeName;
+        if (node != null) {
+            currentNode = node;
+            String contentName = "";
+            String contentShelf = "";
+            Integer contentAmount = -1;
             try (Transaction tx = graphDb.beginTx()) {
-                nodeName = (String) currentNode.getProperty(neo4JConnector.getNodePropertyName());
-
-                tx.success();
-            }
-            if (nodeName == null) {
-                nodeName = Utility.getInstance().getNodeNotFound();
-            }
-            if (saveRelationFromNode(currentNode)) {
-                Notification.show(String.format(Utility.getInstance().getNodeSaveSuccess(), nodeName), Notification.Type.HUMANIZED_MESSAGE);
-            } else {
-                Notification.show(String.format(Utility.getInstance().getNodeSaveFailed(), nodeName), Notification.Type.ERROR_MESSAGE);
-            }
-        }
-        currentNode = node;
-        String contentName = "";
-        String contentShelf = "";
-        Integer contentAmount = -1;
-        try (Transaction tx = graphDb.beginTx()) {
-            contentName = (String) currentNode.getProperty(neo4JConnector.getNodePropertyName());
-            for (Relationship r : currentNode.getRelationships(Neo4JConnector.RelTypes.IS_SOLD_IN, Direction.OUTGOING)) {
-                if (r.getEndNode().getProperty(neo4JConnector.getNodePropertyIndex()).equals(currentStore.getProperty(neo4JConnector.getNodePropertyIndex()))) {
-                    contentShelf = (String) r.getProperty(neo4JConnector.getNodePropertyShelf());
-                    if (currentNode.getProperty(neo4JConnector.getNodePropertyType()).toString().equals(neo4JConnector.getNodeTypeProductvariant())) {
-                        contentAmount = (Integer) r.getProperty(neo4JConnector.getNodePropertyAmount());
+                contentName = (String) currentNode.getProperty(neo4JConnector.getNodePropertyName());
+                for (Relationship r : currentNode.getRelationships(Neo4JConnector.RelTypes.IS_SOLD_IN, Direction.OUTGOING)) {
+                    if (r.getEndNode().getProperty(neo4JConnector.getNodePropertyIndex()).equals(currentStore.getProperty(neo4JConnector.getNodePropertyIndex()))) {
+                        contentShelf = (String) r.getProperty(neo4JConnector.getNodePropertyShelf());
+                        if (currentNode.getProperty(neo4JConnector.getNodePropertyType()).toString().equals(neo4JConnector.getNodeTypeProductvariant())) {
+                            contentAmount = (Integer) r.getProperty(neo4JConnector.getNodePropertyAmount());
+                        }
                     }
                 }
+
+                tx.success();
+            } catch (Exception e) {
+                logger.error(e.getMessage());
             }
 
-            tx.success();
-        } catch (Exception e) {
-            logger.error(e.getMessage());
+            storeCatalogueView.setContentNameTextFieldValue(contentName);
+            storeCatalogueView.setContentShelfNumberTextFieldValue(contentShelf);
+            if (contentAmount >= 0) {
+                storeCatalogueView.setContentQuantityTextFieldValue(contentAmount.toString());
+                storeCatalogueView.showQuantity();
+            } else {
+                storeCatalogueView.hideQuantity();
+            }
+            if (!storeCatalogueView.isContentVisible()) {
+                storeCatalogueView.setContentVisibility(true);
+            }
         }
-
-        storeCatalogueView.setContentNameTextFieldValue(contentName);
-        storeCatalogueView.setContentShelfNumberTextFieldValue(contentShelf);
-        if (contentAmount >= 0) {
-            storeCatalogueView.setContentQuantityTextFieldValue(contentAmount.toString());
-            storeCatalogueView.showQuantity();
-        } else {
-            storeCatalogueView.hideQuantity();
-        }
-        if (!storeCatalogueView.isContentVisible()) {
-            storeCatalogueView.setContentVisibility(true);
-        }
-    }
-
-    private boolean saveRelationFromNode(Node node) {
-        String newShelf = storeCatalogueView.getContentShelfNumberTextFieldValue();
-        Integer newAmount;
-        boolean isProductVariant;
-        try (Transaction tx = graphDb.beginTx()) {
-            isProductVariant = node.getProperty(neo4JConnector.getNodePropertyType()).toString().equals(neo4JConnector.getNodeTypeProductvariant());
-            tx.success();
-        }
-        if (isProductVariant) {
-            newAmount = Integer.parseInt(storeCatalogueView.getContentQuantityTextFieldValue());
-        } else {
-            newAmount = null;
-        }
-
-        return storeCatalogueModel.saveRelationProperties(currentStore, node, newShelf, newAmount);
     }
 
     private boolean saveRelationProperty(String newShelf, String newAmount) {

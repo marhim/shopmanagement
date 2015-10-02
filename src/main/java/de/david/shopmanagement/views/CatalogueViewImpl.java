@@ -3,6 +3,7 @@ package de.david.shopmanagement.views;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import de.david.shopmanagement.interfaces.CatalogueView;
+import de.david.shopmanagement.util.Utility;
 
 /**
  *
@@ -18,17 +19,15 @@ public class CatalogueViewImpl extends CustomComponent implements CatalogueView 
     protected Panel rightContentPanel;
     protected Button mainMenuButton;
     protected Label title;
-    protected Label contentTitle;
 
     public CatalogueViewImpl() {
         mainLayout = new VerticalLayout();
         headLayout = new HorizontalLayout();
         bodySplitPanel = new HorizontalSplitPanel();
-        leftContentPanel = new Panel();
-        rightContentPanel = new Panel();
-        rightBodyLayout = new GridLayout(2,4);
+        leftContentPanel = new Panel(Utility.getInstance().getPanelLabelProductTree());
+        rightContentPanel = new Panel(Utility.getInstance().getPanelLabelProperties());
+        rightBodyLayout = new GridLayout(2,3);
         rightContentPanel.setContent(rightBodyLayout);
-        contentTitle = new Label();
         initItemConfiguration();
     }
 
@@ -38,11 +37,13 @@ public class CatalogueViewImpl extends CustomComponent implements CatalogueView 
         bodySplitPanel.setSplitPosition(20.0f, Unit.PERCENTAGE);
         bodySplitPanel.setLocked(true);
         leftContentPanel.setSizeFull();
+        rightBodyLayout.setSpacing(true);
+        rightBodyLayout.setMargin(true);
     }
 
     protected void createMainMenuButton() {
         mainMenuButton = new Button();
-        mainMenuButton.setIcon(FontAwesome.BARS);
+        mainMenuButton.setIcon(FontAwesome.TH);
         mainMenuButton.addStyleName(CAT_MAIN_MENU_BUTTON_STYLE);
         mainMenuButton.setDescription(MainMenuViewImpl.MAIN_MENU_DISPLAY_NAME);
         mainMenuButton.addClickListener(clickEvent -> getUI().getNavigator().navigateTo(MainMenuViewImpl.NAME));
@@ -55,10 +56,6 @@ public class CatalogueViewImpl extends CustomComponent implements CatalogueView 
         title.setValue(titleString);
         headLayout.addComponent(title);
         headLayout.setComponentAlignment(title, Alignment.MIDDLE_LEFT);
-    }
-
-    protected void createContentTitle() {
-        rightBodyLayout.addComponent(contentTitle, 0, 0, 1, 0);
     }
 
     protected void createSplitPanel() {
@@ -74,6 +71,7 @@ public class CatalogueViewImpl extends CustomComponent implements CatalogueView 
     @Override
     public void setContentVisibility(boolean visibility) {
         rightBodyLayout.setVisible(visibility);
+        rightContentPanel.setVisible(visibility);
     }
 
     @Override

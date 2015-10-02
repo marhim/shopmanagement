@@ -47,23 +47,6 @@ public class Neo4JConnector {
         return Neo4JInstanceHolder.INSTANCE;
     }
 
-    public boolean hasChildren(Node node) {
-        boolean ret = false;
-        int childrenCount = 0;
-        try (Transaction tx = graphDb.beginTx()) {
-            for (Relationship ignored : node.getRelationships(Direction.OUTGOING)) {
-                childrenCount++;
-            }
-
-            tx.success();
-        }
-        if (childrenCount > 0) {
-            ret = true;
-        }
-
-        return ret;
-    }
-
     public GraphDatabaseService getDatabaseService() {
         return Neo4JConnector.graphDb;
     }

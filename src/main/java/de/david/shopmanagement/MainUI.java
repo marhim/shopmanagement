@@ -39,7 +39,7 @@ public class MainUI extends UI {
         CategoryData productCatalogue = new CategoryData();
         productCatalogue.setNavigatorName(ProductCatalogueViewImpl.NAME);
         productCatalogue.setDisplayName(ProductCatalogueViewImpl.DISPLAY_NAME);
-        productCatalogue.setIcon(FontAwesome.BRIEFCASE);
+        productCatalogue.setIcon(FontAwesome.BOOK);
         categories.add(productCatalogue);
         CategoryData storeCatalogue = new CategoryData();
         storeCatalogue.setNavigatorName(StoreCatalogueViewImpl.NAME);

@@ -13,7 +13,6 @@ import de.david.shopmanagement.util.Utility;
 public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCatalogueView, View {
     public static final String NAME = "StoreCatalogue";
     public static final String DISPLAY_NAME = "Filialkatalog";
-    private static final String CONTENT_TITLE = "Eigenschaften";
     private static final String CONTENT_NAME = "Name";
     private static final String CONTENT_SHELF_NUMBER = "Regalnummer";
     private static final String CONTENT_QUANTITY = "Stückzahl";
@@ -30,7 +29,6 @@ public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCa
 
     public StoreCatalogueViewImpl() {
         super();
-        contentTitle.setValue(CONTENT_TITLE);
         contentNameLabel = new Label(CONTENT_NAME);
         contentShelfNumberLabel = new Label(CONTENT_SHELF_NUMBER);
         contentQuantityLabel = new Label(CONTENT_QUANTITY);
@@ -66,13 +64,12 @@ public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCa
     }
 
     private void createContent() {
-        super.createContentTitle();
-        rightBodyLayout.addComponent(contentNameLabel, 0, 1);
-        rightBodyLayout.addComponent(contentNameTextField, 1, 1);
-        rightBodyLayout.addComponent(contentShelfNumberLabel, 0, 2);
-        rightBodyLayout.addComponent(contentShelfNumberTextField, 1, 2);
-        rightBodyLayout.addComponent(contentQuantityLabel, 0, 3);
-        rightBodyLayout.addComponent(contentQuantityTextField, 1, 3);
+        rightBodyLayout.addComponent(contentNameLabel, 0, 0);
+        rightBodyLayout.addComponent(contentNameTextField, 1, 0);
+        rightBodyLayout.addComponent(contentShelfNumberLabel, 0, 1);
+        rightBodyLayout.addComponent(contentShelfNumberTextField, 1, 1);
+        rightBodyLayout.addComponent(contentQuantityLabel, 0, 2);
+        rightBodyLayout.addComponent(contentQuantityTextField, 1, 2);
     }
 
     @Override

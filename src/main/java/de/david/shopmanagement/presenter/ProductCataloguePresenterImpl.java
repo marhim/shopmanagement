@@ -224,22 +224,6 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
     @Override
     public void treeItemClick(Node node) {
         if (node != null) {
-            if (currentNode != null) {
-                String nodeName;
-                try (Transaction tx = graphDb.beginTx()) {
-                    nodeName = (String) currentNode.getProperty(neo4JConnector.getNodePropertyName());
-
-                    tx.success();
-                }
-                if (nodeName == null) {
-                    nodeName = Utility.getInstance().getNodeNotFound();
-                }
-                if (saveNode(currentNode)) {
-                    Notification.show(String.format(Utility.getInstance().getNodeSaveSuccess(), nodeName), Notification.Type.HUMANIZED_MESSAGE);
-                } else {
-                    Notification.show(String.format(Utility.getInstance().getNodeSaveFailed(), nodeName), Notification.Type.ERROR_MESSAGE);
-                }
-            }
             currentNode = node;
             String contentName = "";
             String contentDescription = "";
@@ -269,42 +253,6 @@ public class ProductCataloguePresenterImpl implements ProductCataloguePresenter,
                 productCatalogueView.setContentVisibility(true);
             }
         }
-    }
-
-    private boolean saveNode(Node node) {
-        boolean ret = true;
-        NodeData nodeData = new NodeData();
-        try (Transaction tx = graphDb.beginTx()) {
-            long nodeIdLong = node.getId();
-            nodeData.setNodeId(nodeIdLong);
-
-            tx.success();
-        } catch (EntityNotFoundException e) {
-            logger.error(e.getMessage());
-            ret = false;
-        }
-        if (!ret) {
-            nodeData.setNodeName(productCatalogueView.getContentNameTextFieldValue());
-            nodeData.setNodeDescription(productCatalogueView.getContentDescriptionTextAreaValue());
-            try (Transaction tx = graphDb.beginTx()) {
-                ret = false;
-                if (node.getProperty(neo4JConnector.getNodePropertyType()).toString().equals(neo4JConnector.getNodeTypeProductvariant())) {
-                    ret = nodeData.setNodePrice(productCatalogueView.getContentPriceTextFieldValue());
-                }
-
-                if (ret) {
-                    tx.success();
-                } else {
-                    tx.failure();
-                }
-            } catch (Exception e) {
-                logger.error(e.getMessage());
-            }
-
-            ret = productCatalogueModel.saveNode(nodeData);
-        }
-
-        return ret;
     }
 
     private boolean saveNodeProperty(Long nodeId, String nodeProperty, Object nodePropertyValue) {
