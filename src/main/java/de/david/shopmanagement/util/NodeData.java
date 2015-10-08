@@ -1,6 +1,8 @@
 package de.david.shopmanagement.util;
 
 /**
+ * Dataholding class for saving Data of a node.
+ *
  * @author Marvin
  */
 public class NodeData {

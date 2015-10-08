@@ -7,6 +7,8 @@ import com.vaadin.ui.Tree;
 import org.neo4j.graphdb.Node;
 
 /**
+ * Interface for the view of the product catalogue.
+ *
  * @author Marvin
  */
 public interface ProductCatalogueView {

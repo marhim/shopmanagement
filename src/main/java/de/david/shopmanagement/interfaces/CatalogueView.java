@@ -1,7 +1,7 @@
 package de.david.shopmanagement.interfaces;
 
 /**
- *
+ * Interface for the catalogue-view-superclass.
  */
 public interface CatalogueView {
 

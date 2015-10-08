@@ -1,6 +1,8 @@
 package de.david.shopmanagement.interfaces;
 
 /**
+ * Interface for the presenter of the product catalogue.
+ *
  * @author Marvin
  */
 public interface ProductCataloguePresenter {

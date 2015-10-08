@@ -16,6 +16,7 @@ public class Utility {
     private static final String NODE_SAVE_FAILED = "Eigenschaften von '%s' konnten nicht gespeichert werden!";
     private static final String PROPERTY_SAVE_SUCCESS = "Eigenschaft wurde erfolgreich gespeichert!";
     private static final String PROPERTY_SAVE_FAILED = "Eigenschaft konnte nicht gespeichert werden!";
+    private static final String MISSING_ROOT_NODE_EXCEPTION_MESSAGE = "Es konnte kein Wurzelknoten ermittelt werden. Bitte überprüfen Sie die Suchparameter.";
     private static final int TEXT_CHANGE_TIMEOUT = 5000;
 
     // Innere private Klasse, die erst beim Zugriff durch die umgebende Klasse initialisiert wird
@@ -76,6 +77,10 @@ public class Utility {
 
     public String getNodeSaveFailed() {
         return NODE_SAVE_FAILED;
+    }
+
+    public String getMissingRootNodeExceptionMessage() {
+        return MISSING_ROOT_NODE_EXCEPTION_MESSAGE;
     }
 
     public int getTextChangeTimeout() {

@@ -5,6 +5,8 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.Tree;
 
 /**
+ * Interface for the view of the store catalogue.
+ *
  * @author Marvin
  */
 public interface StoreCatalogueView {

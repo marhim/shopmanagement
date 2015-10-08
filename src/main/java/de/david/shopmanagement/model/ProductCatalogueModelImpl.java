@@ -78,7 +78,7 @@ public class ProductCatalogueModelImpl implements ProductCatalogueModel {
     @Override
     public void deleteNodeWithRelationships(Node node) {
         try (Transaction tx = graphDb.beginTx()) {
-            for (Relationship rel : node.getRelationships(Direction.INCOMING)) {
+            for (Relationship rel : node.getRelationships()) {
                 rel.delete();
             }
             node.delete();

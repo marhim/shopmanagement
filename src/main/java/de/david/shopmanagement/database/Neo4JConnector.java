@@ -8,6 +8,9 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import java.util.Map;
 
 /**
+ * The Neo4JConnector-class uses the singleton-pattern. It contains all database related variables such as Labels or
+ * Strings for Properties. In addition to that it contains database related methods.
+ *
  * @author Marvin
  */
 public class Neo4JConnector {
@@ -99,6 +102,11 @@ public class Neo4JConnector {
         return NODE_PROPERTY_SHELF;
     }
 
+    /**
+     * Returns the next index from nodes with the Label 'ProductCatalog'.
+     *
+     * @return int for the next unused index; -1 if query failed
+     */
     public int getNextIndex() {
         int ret = -1;
         String resultString;

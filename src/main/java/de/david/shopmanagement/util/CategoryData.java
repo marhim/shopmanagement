@@ -3,7 +3,9 @@ package de.david.shopmanagement.util;
 import com.vaadin.server.Resource;
 
 /**
+ * Dataholding class for main menu buttons.
  *
+ * @author Marvin
  */
 public class CategoryData {
     private String navigatorName;

@@ -26,7 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ *  User-Interface, which is used to display the different views and it uses the MVP-pattern.
+ *  It instantiates all Presenters, Views and Models and connect them.
  */
 @Theme("maintheme")
 @Widgetset("de.david.shopmanagement.MyAppWidgetset")

@@ -6,6 +6,8 @@ import org.neo4j.graphdb.Node;
 import java.util.Comparator;
 
 /**
+ * Compares the name-property from two nodes as Strings.
+ *
  * @author Marvin
  */
 public class NodeNameComparator implements Comparator<Node> {

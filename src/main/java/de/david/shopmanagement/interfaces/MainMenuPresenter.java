@@ -1,7 +1,9 @@
 package de.david.shopmanagement.interfaces;
 
 /**
+ * Interface for the presenter of the main menu.
  *
+ * @author Marvin
  */
 public interface MainMenuPresenter {
 

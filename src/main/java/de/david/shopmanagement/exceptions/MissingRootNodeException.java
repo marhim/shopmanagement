@@ -1,12 +1,15 @@
 package de.david.shopmanagement.exceptions;
 
+import de.david.shopmanagement.util.Utility;
+
 /**
+ * This Exception will be thrown, if no root node could be found.
+ *
  * @author Marvin
  */
 public class MissingRootNodeException extends Exception {
-    private static final String MISSING_ROOT_NODE_EXCEPTION_MESSAGE = "Es konnte kein Wurzelknoten ermittelt werden. Bitte überprüfen Sie die Suchparameter.";
 
     public MissingRootNodeException() {
-        super(MISSING_ROOT_NODE_EXCEPTION_MESSAGE);
+        super(Utility.getInstance().getMissingRootNodeExceptionMessage());
     }
 }

@@ -5,6 +5,8 @@ import com.vaadin.ui.Tree;
 import org.neo4j.graphdb.Node;
 
 /**
+ * Interface for the model of the store catalogue.
+ *
  * @author Marvin
  */
 public interface StoreCatalogueModel {
