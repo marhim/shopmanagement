@@ -112,10 +112,13 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
 
     private void createContent() {
         rightBodyLayout.addComponent(contentNameLabel, 0, 0);
+        rightBodyLayout.setComponentAlignment(contentNameLabel, Alignment.MIDDLE_LEFT);
         rightBodyLayout.addComponent(contentNameTextField, 1, 0);
         rightBodyLayout.addComponent(contentDescriptionLabel, 0, 1);
+        rightBodyLayout.setComponentAlignment(contentDescriptionLabel, Alignment.TOP_LEFT);
         rightBodyLayout.addComponent(contentDescriptionTextArea, 1, 1);
         rightBodyLayout.addComponent(contentPriceLabel, 0, 2);
+        rightBodyLayout.setComponentAlignment(contentPriceLabel, Alignment.MIDDLE_LEFT);
         rightBodyLayout.addComponent(contentPriceTextField, 1, 2);
     }
 
@@ -187,6 +190,9 @@ public class ProductCatalogueViewImpl extends CatalogueViewImpl implements Produ
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         rightBodyLayout.setVisible(false);
+        rightContentPanel.setVisible(false);
+        tree.collapseItemsRecursively(tree.getValue());
+        tree.setValue(null);
     }
 
     @Override

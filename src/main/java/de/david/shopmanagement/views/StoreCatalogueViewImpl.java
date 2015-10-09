@@ -65,10 +65,13 @@ public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCa
 
     private void createContent() {
         rightBodyLayout.addComponent(contentNameLabel, 0, 0);
+        rightBodyLayout.setComponentAlignment(contentNameLabel, Alignment.MIDDLE_LEFT);
         rightBodyLayout.addComponent(contentNameTextField, 1, 0);
         rightBodyLayout.addComponent(contentShelfNumberLabel, 0, 1);
+        rightBodyLayout.setComponentAlignment(contentShelfNumberLabel, Alignment.MIDDLE_LEFT);
         rightBodyLayout.addComponent(contentShelfNumberTextField, 1, 1);
         rightBodyLayout.addComponent(contentQuantityLabel, 0, 2);
+        rightBodyLayout.setComponentAlignment(contentQuantityLabel, Alignment.MIDDLE_LEFT);
         rightBodyLayout.addComponent(contentQuantityTextField, 1, 2);
     }
 
@@ -167,6 +170,9 @@ public class StoreCatalogueViewImpl extends CatalogueViewImpl implements StoreCa
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-
+        storeSelect.setValue(null);
+        rightBodyLayout.setVisible(false);
+        rightContentPanel.setVisible(false);
+        leftContentPanel.setVisible(false);
     }
 }
